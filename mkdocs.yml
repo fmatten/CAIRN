@@ -1,0 +1,75 @@
+site_name: CAIRN
+site_description: Clinical interoperability reference architecture. Built on FM-2.
+site_url: https://fm2-project.codeberg.page/cairn
+repo_url: https://codeberg.org/fm2-project/cairn
+repo_name: fm2-project/cairn
+edit_uri: _edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: teal
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.annotate
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+
+nav:
+  - Home: index.md
+  - FM-2 Specification:
+    - Overview: spec/overview.md
+    - Type DAG: spec/type_dag.md
+    - Allen Algebra: spec/allen.md
+    - Event Model: spec/event_model.md
+  - SILD:
+    - Concepts: sild/concepts.md
+    - Loss Patterns: sild/loss_patterns.md
+    - Classification: sild/classification.md
+  - Adapters:
+    - FHIR R4: adapters/fhir_r4.md
+    - HL7 v2: adapters/hl7v2.md
+    - CSV: adapters/csv.md
+  - Analysis:
+    - Cohort Queries: analysis/cohort.md
+    - Terminology Drift: analysis/terminology.md
+    - Variance Analyzer: analysis/variance.md
+  - API Reference: api/rest.md
+  - CLI Reference: api/cli.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: simple/codeberg
+      link: https://codeberg.org/fm2-project/cairn
+
+  version:
+    provider: mike
+
+copyright: >
+  © FM-2 Project Contributors —
+  Licensed under <a href="https://eupl.eu/1.2/en/">EUPL-1.2</a> —
+  NOT a medical device
