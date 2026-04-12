@@ -1,0 +1,14 @@
+﻿CAIRN Clinical Interoperability Reference Architecture
+       (this software). ISCaD GmbH.
+       https://codeberg.org/fm2-project/cairn
+
+ FM-3: AION BSD 3-Clause
+ z3-solver      MIT
+ portion        Apache 2.0
+ hl7            MPL-2.0
+ sqlalchemy     MIT
+ click          MIT
+ xgboost        MIT (IBM)
+ dowhy          MIT
+
+None of these dependencies impose copyleft obligations on CAIRN itself.
