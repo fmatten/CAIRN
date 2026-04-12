@@ -312,4 +312,4 @@ CAIRN is developed by [ISCaD GmbH](https://www.iscad.de) as part of the FM
 - **FM-2** — General clinical information model (formal foundation for CAIRN)
 - **FM-3** — Implementation reference architecture (in preparation)
 
-Contact: Friedhelm Matten · ISCaD GmbH · Braunschweig
+Contact: Friedhelm Matten · ISCaD GmbH · 30900 Wedemark
