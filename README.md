@@ -1,248 +1,315 @@
 # CAIRN
 
-**Clinical interoperability reference architecture. Built on FM-2.**
+**Clinical Interoperability Reference Architecture**
 
-[![Licence: EUPL-1.2](https://img.shields.io/badge/Licence-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![CI](https://ci.codeberg.org/api/badges/fm2-project/cairn/status.svg)](https://ci.codeberg.org/fm2-project/cairn)
-[![NOT a Medical Device](https://img.shields.io/badge/NOT%20a-Medical%20Device-important.svg)](#not-a-medical-device)
+Built on [FM-2](https://codeberg.org/fm2-project/cairn) — a formal mathematical
+model for clinical information systems.
 
----
-
-> ⚠️ **CAIRN is NOT a medical device** as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG.
-> It is a mathematical framework for research and interoperability validation only.
-> It does not process real patient data in production contexts.
+[![Woodpecker CI](https://ci.codeberg.org/api/badges/fm2-project/cairn/status.svg)](https://ci.codeberg.org/fm2-project/cairn)
+[![License: EUPL-1.2](https://img.shields.io/badge/License-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue)](https://www.python.org/)
+[![NOT a medical device](https://img.shields.io/badge/NOT%20a%20medical%20device-EU%20MDR%202017%2F745-red)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745)
 
 ---
 
 ## What is CAIRN?
 
-CAIRN is an open-source reference architecture for formal verification of clinical
-interoperability mappings. It implements FM-2 — a mathematical framework
-modelling clinical data through:
+When a laboratory result moves from a clinical information system into a FHIR
+server, something can get lost. Not always. But systematically — and silently.
 
-- a **type system** as a directed acyclic graph (DAG)
-- **Allen temporal algebra** (13 interval relations)
-- a **universal event model** as a 6-tuple: `(id, type, temporal, value_set, context, provenance)`
-- **Z3 SMT proofs** for value-space containment and structural preservation
-- **SILD** (Silent Information Loss Detector) for CDR-to-FHIR mapping verification
+CAIRN detects this. It implements the **FM-2 formal event model** as executable
+Python, provides adapters for FHIR R4 and HL7 v2, and includes **SILD** — a
+Semantic Information Loss Detector that tracks what happens to clinical
+information as it crosses system boundaries.
 
-CAIRN answers a practical question:
-
-> *What is silently lost when clinical data moves from one system to another —
-> and how can we prove it formally, before production?*
+CAIRN is **not** a clinical application. It is the formal foundation on which
+interoperable clinical applications can be built and verified.
 
 ---
 
-## Was ist CAIRN?
+## Core Concepts
 
-CAIRN ist eine offene Referenzarchitektur für die formale Verifikation klinischer
-Interoperabilitäts-Mappings. Sie implementiert FM-2 — ein mathematisches Modell
-klinischer Daten auf Basis von:
+### The FM-2 Event Model
 
-- einem **Typsystem** als gerichtetem azyklischen Graphen (DAG)
-- **Allen-Temporalalgebra** (13 Intervallrelationen)
-- einem **universellen Ereignismodell** als 6-Tupel: `(id, type, temporal, value_set, context, provenance)`
-- **Z3 SMT-Beweisen** für Werteraum-Containment und Strukturerhalt
-- **SILD** (Silent Information Loss Detector) zur CDR-zu-FHIR-Verifikation
+Every clinical fact in CAIRN is a typed, time-stamped event — a 6-tuple:
 
-> *Was geht beim Datentransfer zwischen klinischen Systemen still verloren —
-> und wie lässt sich das formal nachweisen, bevor es in Produktion geht?*
+```
+e = (patient, stay, type, [t_begin, t_end], attributes, references)
+```
+
+Types form a hierarchy (`tau_lab → tau_obs → top`). Temporal relations between
+events are expressed using all 13 Allen algebra relations.
+
+### SILD — Semantic Information Loss Detector
+
+SILD classifies what is lost when a clinical event crosses a system boundary:
+
+| Loss Pattern | Description |
+|---|---|
+| Type narrowing | `tau_lab` → `tau_obs` (subtype information lost) |
+| Temporal collapse | Interval `[t_B, t_E]` → single timestamp |
+| Attribute dropping | Required attribute missing in target schema |
+| Reference severing | `partOf` link to parent process removed |
+
+### Allen Algebra
+
+All 13 temporal interval relations are implemented as first-class predicates:
+
+```
+precedes · meets · overlaps · finished-by · contains · starts
+equals · started-by · during · finishes · overlapped-by · met-by · preceded-by
+```
 
 ---
 
-## Real-World Loss Patterns Detected by CAIRN
-
-| Loss Class           | Clinical Example                          | FM-2 Formalism     | SILD Class   |
-| -------------------- | ----------------------------------------- | ------------------ | ------------ |
-| Temporal precision   | Anaesthesia 08:12–11:47 → 00:00–23:59     | Allen: DURING      | REGRESSION   |
-| Negation absence     | "No known allergy" → empty FHIR Bundle    | Cardinality n→0    | SILENT\_LOSS |
-| Terminology drift    | SNOMED laterality → ICD-10-GM (lost)      | Value-space ⊊      | DRIFT        |
-| HL7 field mapping    | Cholesterol ref. range + "H" flag dropped | Z3: not surjective | PERSISTENT   |
-| Cardinality collapse | 4 CDR diagnoses → 2 FHIR diagnoses        | φ\_B: CDR ≠ FHIR   | REGRESSION   |
-
----
-
-## Quickstart
+## Installation
 
 ```bash
+# From Codeberg
+git clone https://codeberg.org/fm2-project/cairn.git
+cd cairn
+pip install -e ".[dev]"
+
+# From PyPI (v1.1.0+)
 pip install cairn
 ```
 
+**Requirements:** Python 3.11+, z3-solver, fhir.resources, hl7
+
+---
+
+## Quick Start
+
+### 1 — Define a clinical event
+
 ```python
-from cairn.adapters import FHIRAdapter
-from cairn.verification import SILDAnalyzer
+from cairn.event import ClinicalEvent, EventType
 
-# Load CDR source and FHIR target
-adapter     = FHIRAdapter()
-cdr_events  = adapter.load_bundle_file("source_cdr.json")
-fhir_events = adapter.load_bundle_file("mapped_fhir.json")
-
-# Detect silent information loss
-report = SILDAnalyzer().compare(cdr_events, fhir_events)
-report.print_summary()
+# A laboratory observation: Lactate 2.1 mmol/l at day 15.3
+e_lab = ClinicalEvent(
+    pid=1,
+    aid=1,
+    event_type=EventType("tau_lab"),
+    t_begin=15.3,
+    t_end=15.3,
+    attributes={"q_code": "lactate", "value": 2.1, "unit": "mmol/l"},
+)
 ```
 
+### 2 — Check Allen relations between events
+
+```python
+from cairn.allen import allen_relation, AllenRelation
+
+# An HLM process: [15.2, 15.9]
+e_hlm = ClinicalEvent(pid=1, aid=1, event_type=EventType("tau_hlm"),
+                      t_begin=15.2, t_end=15.9, attributes={})
+
+# Is the lab measurement during the HLM process?
+rel = allen_relation(e_lab, e_hlm)
+assert rel == AllenRelation.DURING   # [15.3, 15.3] d [15.2, 15.9]
 ```
-════════════════════════════════════════════════════════════════
- CAIRN / SILD Report  —  2025-01-01 09:00
-════════════════════════════════════════════════════════════════
- Source : CDR  (5 events)
- Target : FHIR-R4  (3 events)
-────────────────────────────────────────────────────────────────
- [SILENT_LOSS|CRITICAL] AllergyStatement/716186003: Negated event absent in FHIR
- [REGRESSION|HIGH]      Anaesthesia/72641008: Temporal precision lost (215min → 1439min)
- [REGRESSION|MEDIUM]    LabResult/2093-3: Value-space not preserved: missing referenceRange
-────────────────────────────────────────────────────────────────
- Total: 3 findings | 2 regressions | 1 silent losses | 1 critical
-════════════════════════════════════════════════════════════════
+
+### 3 — Load a FHIR Observation and detect information loss
+
+```python
+from cairn.fhir_r4 import FhirR4Adapter
+from cairn.sild import SILDDetector
+
+adapter = FhirR4Adapter()
+sild    = SILDDetector()
+
+# Load a FHIR Observation resource
+fhir_obs = adapter.load_file("observation_lactate.json")
+
+# Map to internal event model
+event, losses = adapter.to_event(fhir_obs)
+
+# Inspect what was lost
+for loss in losses:
+    print(f"[{loss.pattern}] {loss.description}")
+# → [TEMPORAL_COLLAPSE] effectiveDateTime mapped to point interval
+# → [REFERENCE_SEVERED] partOf not present in source resource
 ```
+
+### 4 — Run a cohort query
+
+```python
+from cairn.cohort import CohortQuery
+
+# phi_FM1: patients with arrhythmia diagnosis followed by ablation
+# within 30 days (FM-2 Section 23, Example query)
+query = CohortQuery.from_formula(
+    diagnosis_code="d_Arr",
+    procedure_code="o_ABL",
+    max_days=30,
+)
+
+cohort = query.execute(event_store)
+print(f"Cohort size: {len(cohort)}")
+```
+
+### 5 — Verify formal properties with Z3
+
+```python
+from cairn.homomorphism import FhirHomomorphismVerifier
+
+verifier = FhirHomomorphismVerifier()
+
+# Verify that the FHIR mapping preserves type hierarchy
+result = verifier.verify_type_hierarchy_preservation()
+print(result.is_sat)   # True if mapping is formally correct
+```
+
+---
+
+## Adapters
+
+| Adapter | Module | Supported formats |
+|---|---|---|
+| FHIR R4 | `cairn.fhir_r4` | Observation, Procedure, Condition, MedicationAdministration, Bundle |
+| HL7 v2 | `cairn.hl7v2` | ORU^R01, ADT^A01, RXA |
+| CSV / DataFrame | `cairn.csv_df` | pandas DataFrame, CSV files |
+
+---
+
+## SILD — Loss Pattern Classification
+
+```python
+from cairn.sild import SILDDetector, LossPattern
+
+detector = SILDDetector()
+
+# Analyse a full HL7 v2 → FHIR R4 conversion
+report = detector.analyse_conversion(
+    source_msg=hl7_message,
+    target_resource=fhir_resource,
+)
+
+print(report.summary())
+# Total events analysed: 147
+# Events with loss:       23  (15.6%)
+# Loss patterns:
+#   TYPE_NARROWING:     11
+#   TEMPORAL_COLLAPSE:   8
+#   ATTRIBUTE_DROPPING:  3
+#   REFERENCE_SEVERED:   1
+```
+
+---
+
+## CLI
 
 ```bash
-# CLI
-cairn verify   --source cdr.json  --target fhir.json  --output report.json
-cairn drift    --source cdr.json  --target fhir.json
-cairn variance --files a.csv:HausA:Orbis  --files b.csv:HausB:iMedOne
+# Analyse a FHIR Bundle for information loss
+cairn sild analyse --input bundle.json --format fhir-r4
+
+# Run cohort query from formula file
+cairn cohort query --formula phi_FM1.yaml --store events.db
+
+# Verify FHIR mapping homomorphism properties
+cairn verify homomorphism --adapter fhir_r4
+
+# Show version
 cairn version
 ```
 
 ---
 
-## Modules
-
-| Module               | Contents                                                     |
-| -------------------- | ------------------------------------------------------------ |
-| `cairn.core`         | Type DAG · Allen algebra (13 relations) · 6-tuple event model · Homomorphism checker |
-| `cairn.verification` | Z3 SMT proofs · Value-space containment · SILD engine        |
-| `cairn.adapters`     | FHIR R4 · HL7 v2 (ORU/ADT/RXA) · CSV/DataFrame               |
-| `cairn.analysis`     | Cohort queries φA–φD · Terminology drift · Multi-site KIS variance |
-| `cairn.api`          | FastAPI REST (`POST /verify` · `POST /drift` · `GET /health`) |
-| `cairn.cli`          | Click CLI (`verify` · `drift` · `variance` · `version`)      |
-
----
-
-## Architecture
+## Project Structure
 
 ```
 cairn/
-├── core/
-│   ├── allen.py          # Allen temporal algebra — 13 interval relations
-│   ├── event.py          # Universal event model — 6-tuple (FMEvent)
-│   ├── homomorphism.py   # Structure-preservation checker
-│   └── type_dag.py       # Type system as directed acyclic graph
-│
-├── verification/
-│   ├── sild.py           # Silent Information Loss Detector
-│   └── z3_proofs.py      # Z3 SMT formal proofs
-│
-├── adapters/
-│   ├── csv_df.py         # CSV / pandas DataFrame
-│   ├── fhir_r4.py        # FHIR R4 (Observation, Condition, Procedure, ...)
-│   └── hl7v2.py          # HL7 v2 (ORU^R01, ADT^A01, RXA)
-│
-├── analysis/
-│   ├── cohort.py         # FM-2 cohort queries φA–φD
-│   ├── terminology.py    # Terminology drift checker
-│   └── variance.py       # Multi-site completeness variance (KIS comparison)
-│
-├── api/
-│   └── app.py            # FastAPI REST API
-│
-└── cli/
-    └── commands.py       # Click command-line interface
-
-tests/
-├── unit/                 # FM-2 core — all 13 Allen relations, DAG, event model
-├── integration/          # SILD — all 5 real-world loss patterns
-└── property/             # Hypothesis property tests — FM-2 invariants P1–P6
+├── allen.py          # All 13 Allen temporal relations
+├── event.py          # Universal 6-tuple event model (FM-2 Section 4)
+├── cohort.py         # Cohort query engine (FM-2 Section 10)
+├── fhir_r4.py        # FHIR R4 adapter + SILD integration
+├── hl7v2.py          # HL7 v2 adapter (ORU/ADT/RXA)
+├── csv_df.py         # CSV / DataFrame adapter
+├── homomorphism.py   # Z3-based formal verification (FM-2 Section 17)
+├── sild.py           # Semantic Information Loss Detector
+├── commands.py       # Click CLI
+└── app.py            # FastAPI REST API
 ```
 
 ---
 
-## Dependencies
+## Formal Foundation
 
-CAIRN is built exclusively on publicly available PyPI libraries.
-All dependencies with their licences are documented in [NOTICE](./NOTICE).
+CAIRN implements the mathematical structures from FM-2:
 
-```toml
-# Core
-networkx       >= 3.2    # Type DAG, homomorphism       BSD-3-Clause
-z3-solver      >= 4.12   # SMT formal verification       MIT
-pydantic       >= 2.5    # Schema validation             MIT
-pandas         >= 2.1    # DataFrame adapter             BSD-3-Clause
-
-# Healthcare standards
-fhir.resources >= 7.1    # FHIR R4                      BSD-3-Clause
-hl7            >= 0.4    # HL7 v2 parsing               BSD-3-Clause
-
-# API & CLI
-fastapi        >= 0.110  # REST API                      MIT
-click          >= 8.1    # CLI                           BSD-3-Clause
-```
+| FM-2 Concept | CAIRN Module |
+|---|---|
+| Type hierarchy $H_\mathcal{T}$ | `event.EventType`, `event.TypeDAG` |
+| Universal event 6-tuple | `event.ClinicalEvent` |
+| All 13 Allen relations | `allen.allen_relation` |
+| Fuzzy time intervals (Section 5) | `allen.FuzzyInterval` |
+| Cohort query language (Section 10) | `cohort.CohortQuery` |
+| FHIR homomorphism (Section 17) | `homomorphism.FhirHomomorphismVerifier` |
+| Validation operator $\Pi_l$ | `event.validate` |
+| Confidence-weighted events | `event.ClinicalEvent.confidence` |
 
 ---
 
 ## Tests
 
 ```bash
-pip install -e ".[dev]"
+# All tests
 pytest tests/ -v
+
+# By category
+pytest tests/unit/        # Unit tests
+pytest tests/integration/ # Integration tests
+pytest tests/property/    # Property-based tests (Hypothesis)
+
+# With coverage
+pytest tests/ --cov=cairn --cov-report=term-missing
 ```
 
-```
-40 passed in 4.35s
-
-tests/unit/        30 tests  (Type DAG · Allen algebra · event model)
-tests/integration/  7 tests  (5 SILD loss patterns)
-tests/property/     6 tests  (Hypothesis: FM-2 invariants P1–P6)
-```
-
----
-
-## Licence
-
-CAIRN is licensed under the **European Union Public Licence v. 1.2 (EUPL-1.2)**.
-
-- Free to use, modify, and distribute
-- Modifications **must be contributed back** under the same licence
-- Copyleft covers network use (SaaS)
-- Legally valid in all EU member states in their official languages
-
-See [LICENCE](./LICENCE) for the full text.
-
----
-
-## Not a Medical Device
-
-CAIRN is a mathematical research tool. It is **not** a medical device under:
-
-- EU MDR 2017/745 (Medical Device Regulation)
-- EU IVDR 2017/746 (In Vitro Diagnostic Regulation)
-- MPDG — Medizinprodukterecht-Durchführungsgesetz (Deutschland)
-
-See [NOTICE](./NOTICE) for the complete disclaimer.
+40 tests pass across Python 3.11 and 3.12.
 
 ---
 
 ## Contributing
 
-Contributions are welcome under EUPL-1.2.
-By contributing, you agree your changes will be returned to the reference system.
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[Pull Request Template](.gitea/PULL_REQUEST_TEMPLATE.md).
 
-- Issues: https://codeberg.org/fm2-project/cairn/issues
-- Guide: [CONTRIBUTING.md](./CONTRIBUTING.md)
+All contributions must:
+- Pass `ruff check` and `mypy cairn`
+- Include tests (unit + property-based where applicable)
+- Preserve FM-2 invariants (Allen mutual exclusivity, type DAG consistency)
+- Be licensed under EUPL-1.2
 
 ---
 
-## Citation
+## Licence
 
-```bibtex
-@software{cairn2025,
-  title   = {CAIRN — Clinical interoperability reference architecture},
-  author  = {FM-2 Project Contributors},
-  year    = {2025},
-  url     = {https://codeberg.org/fm2-project/cairn},
-  licence = {EUPL-1.2},
-  version = {1.0.0}
-}
-```
+CAIRN is licensed under the
+[European Union Public Licence 1.2 (EUPL-1.2)](https://eupl.eu/1.2/en/).
+
+This is a **copyleft** licence compatible with GPL v2/v3, AGPL, MPL and others.
+Modifications must be returned to the community under the same licence.
+
+---
+
+## ⚠️ Scope
+
+**CAIRN is NOT a medical device** within the meaning of EU MDR 2017/745 / MPDG.
+
+It is a software library for formal modelling, verification and analysis of
+clinical information structures. It does not make clinical decisions, does not
+interact with patients, and is not intended for direct clinical use.
+
+---
+
+## About
+
+CAIRN is developed by [ISCaD GmbH](https://www.iscad.de) as part of the FM
+(Formal Models for Clinical Information Systems) project series:
+
+- **FM-1** — Formal model for cardiac surgery data (2020)
+- **FM-2** — General clinical information model (formal foundation for CAIRN)
+- **FM-3** — Implementation reference architecture (in preparation)
+
+Contact: Friedhelm Matten · ISCaD GmbH · Braunschweig
