@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cairn"
+version = "0.1.0"
+description = "CAIRN software package for clinical informatics, governance and interoperability workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "EUPL-1.2"
+license-files = [
+    "LICENSE.md",
+    "LICENSE-COMMERCIAL.md",
+    "NOTICE",
+    "LICENSES/EUPL-1.2.txt",
+]
+authors = [
+    { name = "Friedhelm Matten" }
+]
+maintainers = [
+    { name = "Iscad GmbH", email = "info@iscad-it.de" }
+]
+keywords = ["clinical-informatics", "interoperability", "governance", "healthcare"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+
+[project.urls]
+Homepage = "https://www.aion-clinical.eu"
+Source = "https://codeberg.org/iscad/cairn"
+Issues = "https://codeberg.org/iscad/cairn/issues"
+Commercial-License = "https://www.iscad-it.de"
