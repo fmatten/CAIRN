@@ -17,6 +17,19 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.3] — 2026-05-25
+
+### Licence Change: EUPL-1.2 → AGPL-3.0-only OR Commercial
+
+- Replaced EUPL-1.2 with AGPL-3.0-only OR LicenseRef-ISCaD-Commercial (Dual-Lizenz)
+- Updated LICENCE file with full AGPL-3.0 text
+- Added LICENSE-COMMERCIAL.md for commercial licensing
+- Updated pyproject.toml classifier
+- Updated SPDX headers in all 21 Python source files
+- Updated README badge and licence section
+
+---
+
 ## [1.0.2] — 2026-05-25
 
 ### PyPI Metadata

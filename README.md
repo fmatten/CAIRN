@@ -217,7 +217,7 @@ tests/property/     6 tests  (Hypothesis: FM-2 invariants P1–P6)
 
 ## Licence
 
-CAIRN is licensed under the **European Union Public Licence v. 1.2 (EUPL-1.2)**.
+CAIRN is licensed under the **GNU Affero General Public License v3 (AGPL-3.0-only OR Commercial)**.
 
 - Free to use, modify, and distribute
 - Modifications **must be contributed back** under the same licence
@@ -253,7 +253,7 @@ See [NOTICE](./NOTICE) for the complete disclaimer.
 
 ## Contributing
 
-Contributions are welcome under EUPL-1.2.
+Contributions are welcome under AGPL-3.0 OR Commercial.
 By contributing, you agree your changes will be returned to the reference system.
 
 - Issues: https://github.com/fmatten/CAIRN/issues
@@ -271,7 +271,7 @@ By contributing, you agree your changes will be returned to the reference system
   year    = {2026},
   doi     = {10.5281/zenodo.20375036},
   url     = {https://github.com/fmatten/CAIRN},
-  licence = {EUPL-1.2},
+  licence = {AGPL-3.0-only},
   version = {1.0.1}
 }
 ```
