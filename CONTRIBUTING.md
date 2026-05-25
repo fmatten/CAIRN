@@ -15,7 +15,7 @@ This ensures CAIRN remains a true open reference architecture — not a fork bas
 ## How to Contribute
 
 ### Bug Reports and Feature Requests
-Open an issue at: https://codeberg.org/fm2-project/cairn/issues
+Open an issue at: https://codeberg.org/iscad/cairn/issues
 
 Please include:
 - CAIRN version (`cairn version`)
@@ -61,7 +61,7 @@ Any PR that would move CAIRN toward medical device territory will be rejected.
 ## Development Setup
 
 ```bash
-git clone https://codeberg.org/fm2-project/cairn.git
+git clone https://codeberg.org/iscad/cairn.git
 cd cairn
 pip install -e ".[dev]"
 pytest
@@ -69,4 +69,4 @@ pytest
 
 ## Questions
 
-Open a discussion at: https://codeberg.org/fm2-project/cairn/issues
+Open a discussion at: https://codeberg.org/iscad/cairn/issues
