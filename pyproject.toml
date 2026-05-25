@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cairn-clinical"
-version = "1.0.2"
+version = "1.0.3"
 description = "FM-2 formal verification of CDR-to-FHIR mappings — Allen algebra, Z3 SMT proofs, SILD silent information loss detection."
 readme = "README.md"
 license = { file = "LICENCE" }
@@ -36,7 +36,7 @@ classifiers = [
   "Intended Audience :: Science/Research",
   "Intended Audience :: Healthcare Industry",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+  "License :: OSI Approved :: GNU Affero General Public License v3",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",

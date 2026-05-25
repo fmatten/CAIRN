@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Friedhelm Matten / ISCaD GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
 """FM-2 Core — Type DAG, Allen Algebra, Event Model, Homomorphism."""
 
 from cairn.core.allen import AllenRelation, TimeInterval, allen_relation, inverse_relation

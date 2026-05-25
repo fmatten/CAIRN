@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Friedhelm Matten / ISCaD GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
 """FM-2 Formal Verification — Z3 SMT Proofs and SILD."""
 
 from cairn.verification.sild import (

@@ -2,8 +2,8 @@
 
 **Clinical interoperability reference architecture. Built on FM-2.**
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/fmatten/CAIRN/releases)
-[![Licence: EUPL-1.2](https://img.shields.io/badge/Licence-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
+[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/fmatten/CAIRN/releases)
+[![Licence: AGPL-3.0](https://img.shields.io/badge/Licence-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20375036.svg)](https://doi.org/10.5281/zenodo.20375036)
 [![PyPI](https://img.shields.io/pypi/v/cairn-clinical.svg)](https://pypi.org/project/cairn-clinical/)
