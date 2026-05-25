@@ -68,6 +68,39 @@ def run(token: str, dry_run: bool = False) -> None:
     print(f"  Dry-run   : {dry_run}")
     print("═" * 60)
 
+    # ── Dry-run: file check only, no API calls needed ─────────────────────────
+    if dry_run:
+        print("\n[DRY-RUN] Dateien prüfen ...")
+        all_ok = True
+        total_bytes = 0
+        for f in UPLOAD_FILES:
+            if f.exists():
+                size_kb = f.stat().st_size // 1024
+                total_bytes += f.stat().st_size
+                print(f"  ✓ {f.name:<45} {size_kb:>6} KB")
+            else:
+                print(f"  ✗ FEHLT: {f}")
+                all_ok = False
+
+        print(f"\n[DRY-RUN] Metadaten ({ZENODO_JSON.name}) ...")
+        if ZENODO_JSON.exists():
+            meta = json.load(open(ZENODO_JSON))
+            print(f"  ✓ version          : {meta.get('version')}")
+            print(f"  ✓ publication_date : {meta.get('publication_date')}")
+            print(f"  ✓ creators         : {meta['creators'][0]['name']}")
+            print(f"  ✓ keywords         : {len(meta.get('keywords', []))} Einträge")
+        else:
+            print(f"  ✗ {ZENODO_JSON} fehlt")
+            all_ok = False
+
+        print(f"\n[DRY-RUN] Ziel ...")
+        print(f"  → Zenodo Record : https://zenodo.org/records/{RECORD_ID}")
+        print(f"  → Neue Version  : v1.0.1")
+        print(f"  → Gesamtgröße   : {total_bytes // 1024} KB")
+        print(f"\n[DRY-RUN] {'✅ Bereit für Upload.' if all_ok else '❌ Bitte fehlende Dateien ergänzen.'}")
+        print("  Starte echten Upload mit: python3 tools/zenodo_upload.py --token TOKEN")
+        return
+
     headers = get_headers(token)
     headers_no_ct = {k: v for k, v in headers.items() if k != "Content-Type"}
 
@@ -81,14 +114,6 @@ def run(token: str, dry_run: bool = False) -> None:
     record = r.json()
     print(f"     Titel  : {record.get('title', record.get('metadata', {}).get('title', '?'))}")
     print(f"     Status : {record.get('state', record.get('status', '?'))}")
-
-    if dry_run:
-        print("\n[DRY-RUN] Würde neue Version erstellen und Dateien hochladen:")
-        for f in UPLOAD_FILES:
-            status = "✓ vorhanden" if f.exists() else "✗ fehlt"
-            print(f"  {status}  {f.name}  ({f.stat().st_size // 1024} KB)" if f.exists() else f"  {status}  {f}")
-        print("\n[DRY-RUN] Kein Upload durchgeführt.")
-        return
 
     # ── Step 2: Create new version ─────────────────────────────────────────────
     print("\n[2] Neue Version erstellen ...")
@@ -194,8 +219,11 @@ if __name__ == "__main__":
             token = Path("/tmp/.zt").read_text().strip()
             print("Token aus /tmp/.zt gelesen.")
         except FileNotFoundError:
-            print("Fehler: Kein Zenodo-Token gefunden.")
-            print("Setze ZENODO_TOKEN oder übergib --token TOKEN")
-            sys.exit(1)
+            if args.dry_run:
+                token = "dry-run-no-token"  # dry-run needs no real token
+            else:
+                print("Fehler: Kein Zenodo-Token gefunden.")
+                print("Setze ZENODO_TOKEN oder übergib --token TOKEN")
+                sys.exit(1)
 
     run(token=token, dry_run=args.dry_run)
