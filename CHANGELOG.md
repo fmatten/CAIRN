@@ -5,6 +5,16 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.2] — 2026-05-25
+
+### PyPI Metadata
+
+- Updated `description` field: now reflects FM-2, Allen algebra, Z3, SILD explicitly
+- URLs: all `fm2-project/cairn` references replaced with `iscad/cairn`
+- Synchronized GitHub, Codeberg, Zenodo, PyPI
+
+---
+
 ## [1.0.1] — 2026-05-25
 
 ### FM-2 Compliance Fixes (9 findings closed)

@@ -5,8 +5,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cairn-clinical"
-version = "1.0.1"
-description = "Clinical interoperability reference architecture. Built on FM-2."
+version = "1.0.2"
+description = "FM-2 formal verification of CDR-to-FHIR mappings — Allen algebra, Z3 SMT proofs, SILD silent information loss detection."
 readme = "README.md"
 license = { file = "LICENCE" }
 requires-python = ">=3.11"

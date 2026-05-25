@@ -19,7 +19,7 @@ abstract: >
 
   NOT a medical device (EU MDR 2017/745 / MPDG).
 
-version: "1.0.1"
+version: "1.0.2"
 
 date-released: "2026-05-25"
 
