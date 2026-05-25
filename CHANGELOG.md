@@ -5,6 +5,18 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.3] — 2026-05-25
+
+### Licence Change: EUPL-1.2 → AGPL-3.0
+
+- Replaced EUPL-1.2 with GNU Affero General Public License v3 (AGPL-3.0-only)
+- Updated `LICENCE` file with full AGPL-3.0 text
+- Updated `pyproject.toml`: classifier → `GNU Affero General Public License v3`
+- Added `SPDX-License-Identifier: AGPL-3.0-only` headers to all 21 Python source files
+- Updated README badge: EUPL-1.2 → AGPL-3.0
+
+---
+
 ## [1.0.2] — 2026-05-25
 
 ### PyPI Metadata

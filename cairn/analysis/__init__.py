@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Friedhelm Matten / ISCaD GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
 """CAIRN Analysis Modules."""
 
 from cairn.analysis.cohort import CohortAnalyzer, CohortResult
