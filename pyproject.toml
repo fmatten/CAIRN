@@ -5,14 +5,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cairn"
-version = "1.0.0"
+version = "1.0.1"
 description = "Clinical interoperability reference architecture. Built on FM-2."
 readme = "README.md"
 license = { file = "LICENCE" }
 requires-python = ">=3.11"
 
 authors = [
-  { name = "FM-2 Project Contributors" },
+  { name = "Friedhelm Matten", email = "friedhelm.matten@iscad-it.de" },
 ]
 
 keywords = [
@@ -26,6 +26,9 @@ keywords = [
   "information-loss",
   "sild",
   "fm2",
+  "cdr",
+  "terminology-drift",
+  "graph-homomorphism",
 ]
 
 classifiers = [
@@ -38,6 +41,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Information Analysis",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
@@ -91,11 +95,12 @@ cairn-api = "cairn.api:serve"
 
 
 [project.urls]
-Homepage      = "https://codeberg.org/fm2-project/cairn"
-Repository    = "https://codeberg.org/fm2-project/cairn"
-Issues        = "https://codeberg.org/fm2-project/cairn/issues"
-Changelog     = "https://codeberg.org/fm2-project/cairn/src/branch/main/CHANGELOG.md"
-Documentation = "https://codeberg.org/fm2-project/cairn/wiki"
+Homepage      = "https://github.com/fmatten/CAIRN"
+Repository    = "https://github.com/fmatten/CAIRN"
+Issues        = "https://github.com/fmatten/CAIRN/issues"
+Changelog     = "https://github.com/fmatten/CAIRN/blob/master/CHANGELOG.md"
+Documentation = "https://github.com/fmatten/CAIRN#readme"
+Mirror        = "https://codeberg.org/fm2-project/cairn"
 
 
 [tool.hatch.build.targets.wheel]
@@ -129,5 +134,5 @@ source   = ["cairn"]
 branch   = true
 
 [tool.coverage.report]
-fail_under = 30
+fail_under = 50
 show_missing = true
