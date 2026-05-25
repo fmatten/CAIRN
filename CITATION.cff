@@ -1,0 +1,78 @@
+cff-version: 1.2.0
+
+message: >
+  If you use CAIRN in academic or research work, please cite it
+  using the metadata in this file.
+
+title: "CAIRN — Clinical interoperability reference architecture. Built on FM-2."
+
+abstract: >
+  CAIRN is an open-source reference architecture for formal verification
+  of clinical interoperability mappings. It implements FM-2, a mathematical
+  framework modelling clinical data through a type system as a directed acyclic
+  graph (DAG), Allen temporal algebra (13 interval relations), and a universal
+  event model as a 6-tuple. CAIRN includes SILD (Silent Information Loss
+  Detector), which formally verifies CDR-to-FHIR mappings using Z3 SMT proofs.
+
+  NOT a medical device (EU MDR 2017/745 / MPDG).
+
+version: "1.0.0"
+
+date-released: "2025-01-01"
+
+license: EUPL-1.2
+
+repository-code: "https://codeberg.org/fm2-project/cairn"
+
+url: "https://codeberg.org/fm2-project/cairn"
+
+type: software
+
+authors:
+  - name: "FM-2 Project Contributors"
+
+keywords:
+  - FHIR
+  - HL7
+  - interoperability
+  - formal verification
+  - Allen algebra
+  - clinical informatics
+  - information loss
+  - SILD
+  - FM-2
+  - openEHR
+  - health informatics
+  - Z3
+  - SMT
+
+references:
+  - type: article
+    title: "Maintaining knowledge about temporal intervals"
+    authors:
+      - family-names: Allen
+        given-names: "James F."
+    journal: "Communications of the ACM"
+    volume: 26
+    issue: 11
+    pages: "832-843"
+    year: 1983
+    doi: "10.1145/182.358434"
+
+  - type: standard
+    title: "Health informatics — Interoperability and integration reference architecture"
+    institution:
+      name: "International Organization for Standardization"
+    number: "ISO 23903:2021"
+    year: 2021
+
+  - type: conference-paper
+    title: "Z3: An Efficient SMT Solver"
+    authors:
+      - family-names: "de Moura"
+        given-names: "Leonardo"
+      - family-names: "Bjørner"
+        given-names: "Nikolaj"
+    collection-title: "Tools and Algorithms for the Construction and Analysis of Systems (TACAS 2008)"
+    year: 2008
+    doi: "10.1007/978-3-540-78800-3_24"

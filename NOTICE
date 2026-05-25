@@ -1,0 +1,126 @@
+CAIRN — Clinical interoperability reference architecture.
+Built on FM-2.
+
+Copyright (c) 2025 FM-2 Project Contributors
+Licensed under the European Union Public Licence v. 1.2 (EUPL-1.2)
+See LICENCE for the full licence text.
+
+Repository: https://codeberg.org/fm2-project/cairn
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOT A MEDICAL DEVICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAIRN is a mathematical framework and research tool for interoperability
+analysis. It is NOT a medical device as defined by:
+
+  - EU MDR 2017/745 (Medical Device Regulation)
+  - EU IVDR 2017/746 (In Vitro Diagnostic Regulation)
+  - MPDG — Medizinprodukterecht-Durchführungsgesetz (Deutschland)
+  - Any equivalent national legislation
+
+CAIRN does NOT:
+  - Provide clinical decision support
+  - Process real patient data in production contexts
+  - Diagnose, treat, or monitor any medical condition
+  - Replace professional medical judgment
+
+CAIRN is intended exclusively for:
+  - Academic research and education
+  - Interoperability system validation
+  - Formal verification of data mapping processes
+  - Reference implementation of the FM-2 mathematical framework
+
+Use in clinical production environments is not intended and not supported.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THIRD-PARTY DEPENDENCIES (PyPI)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAIRN is built exclusively on publicly available PyPI libraries.
+The following third-party packages are used under their respective licences:
+
+CORE
+  networkx          >= 3.2      BSD-3-Clause
+    https://networkx.org
+    Used for: Type DAG, graph homomorphism
+
+  z3-solver         >= 4.12     MIT
+    https://github.com/Z3Prover/z3
+    Used for: SMT formal verification, Allen algebra proofs
+
+DATA MODELS
+  pydantic          >= 2.5      MIT
+    https://docs.pydantic.dev
+    Used for: Schema validation, mapping rulesets
+
+  pandas            >= 2.1      BSD-3-Clause
+    https://pandas.pydata.org
+    Used for: DataFrame adapter, cohort analysis
+
+  openpyxl          >= 3.1      MIT
+    https://openpyxl.readthedocs.io
+    Used for: Excel reporting
+
+HEALTHCARE STANDARDS
+  fhir.resources    >= 7.1      BSD-3-Clause
+    https://github.com/nazrulworld/fhir.resources
+    Used for: FHIR R4 resource parsing and validation
+
+  hl7               >= 0.4      BSD-3-Clause
+    https://python-hl7.readthedocs.io
+    Used for: HL7 v2 message parsing (ORU^R01, ADT^A01, RXA)
+
+API & CLI
+  fastapi           >= 0.110    MIT
+    https://fastapi.tiangolo.com
+    Used for: REST API
+
+  uvicorn           >= 0.27     BSD-3-Clause
+    https://www.uvicorn.org
+    Used for: ASGI server
+
+  click             >= 8.1      BSD-3-Clause
+    https://click.palletsprojects.com
+    Used for: Command-line interface
+
+UTILITIES
+  pyyaml            >= 6.0      MIT
+    https://pyyaml.org
+    Used for: YAML-based mapping ruleset configuration
+
+  jinja2            >= 3.1      BSD-3-Clause
+    https://jinja.palletsprojects.com
+    Used for: HTML/SVG report generation
+
+  httpx             >= 0.27     BSD-3-Clause
+    https://www.python-httpx.org
+    Used for: Async HTTP client
+
+DEVELOPMENT & TESTING
+  pytest            >= 8.0      MIT
+  pytest-cov        >= 5.0      MIT
+  hypothesis        >= 6.100    MPL-2.0
+  mypy              >= 1.9      MIT
+  ruff              >= 0.4      MIT
+
+DOCUMENTATION
+  mkdocs            >= 1.5      BSD-2-Clause
+  mkdocs-material   >= 9.5      MIT
+  jupyter           >= 1.0      BSD-3-Clause
+
+All licences are compatible with EUPL-1.2 as per Article 5 and the
+Appendix of the EUPL-1.2 licence text.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTRIBUTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Contributions to CAIRN are welcome under the terms of EUPL-1.2.
+By contributing, you agree that your contributions will be licensed
+under the same licence and returned to the reference system.
+
+See CONTRIBUTING.md for guidelines.

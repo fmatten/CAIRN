@@ -1,0 +1,74 @@
+# CAIRN — Woodpecker CI Pipeline
+# Platform: Codeberg (https://codeberg.org/fm2-project/cairn)
+# Docs: https://woodpecker-ci.org/docs
+
+when:
+  - event: [push, pull_request]
+
+steps:
+
+  # ── 1. Lint ──────────────────────────────────────────────────────────────
+  lint:
+    image: python:3.11-slim
+    commands:
+      - pip install ruff --quiet
+      - ruff check cairn tests
+      - ruff format --check cairn tests
+    when:
+      - event: [push, pull_request]
+
+  # ── 2. Type check ─────────────────────────────────────────────────────────
+  typecheck:
+    image: python:3.11-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - mypy cairn --ignore-missing-imports
+    when:
+      - event: [push, pull_request]
+
+  # ── 3. Unit tests ─────────────────────────────────────────────────────────
+  test-unit:
+    image: python:3.11-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - pytest tests/unit/ -v --no-header --tb=short
+    when:
+      - event: [push, pull_request]
+
+  # ── 4. Integration tests ──────────────────────────────────────────────────
+  test-integration:
+    image: python:3.11-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - pytest tests/integration/ -v --no-header --tb=short
+    when:
+      - event: [push, pull_request]
+
+  # ── 5. Property-based tests ───────────────────────────────────────────────
+  test-property:
+    image: python:3.11-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - pytest tests/property/ -v --no-header --tb=short
+    when:
+      - event: [push, pull_request]
+
+  # ── 6. Coverage gate (main branch only) ──────────────────────────────────
+  coverage:
+    image: python:3.11-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - pytest tests/ --cov=cairn --cov-report=term-missing --cov-fail-under=30
+    when:
+      - event: push
+        branch: main
+
+  # ── 7. Multi-version matrix (main branch only) ────────────────────────────
+  test-py312:
+    image: python:3.12-slim
+    commands:
+      - pip install -e ".[dev]" --quiet
+      - pytest tests/ -q --no-header
+    when:
+      - event: push
+        branch: main

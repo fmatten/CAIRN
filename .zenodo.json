@@ -1,0 +1,83 @@
+{
+  "title": "CAIRN — Clinical interoperability reference architecture. Built on FM-2.",
+
+  "description": "<p>CAIRN is an open-source reference architecture for formal verification of clinical interoperability mappings. It implements FM-2 — a mathematical framework modelling clinical data through a type system as a directed acyclic graph (DAG), Allen temporal algebra (13 interval relations), and a universal event model as a 6-tuple.</p><p>CAIRN includes SILD (Silent Information Loss Detector), which formally verifies CDR-to-FHIR mappings and classifies detected losses as REGRESSION, IMPROVEMENT, PERSISTENT, SILENT_LOSS, or DRIFT using Z3 SMT proofs.</p><p><strong>NOT a medical device</strong> as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG. For research and interoperability validation only.</p>",
+
+  "version": "1.0.0",
+
+  "upload_type": "software",
+
+  "publication_date": "2025-01-01",
+
+  "license": "eupl-1.2",
+
+  "language": "eng",
+
+  "keywords": [
+    "FHIR",
+    "HL7",
+    "interoperability",
+    "formal verification",
+    "Allen algebra",
+    "clinical informatics",
+    "information loss",
+    "SILD",
+    "FM-2",
+    "openEHR",
+    "ICD-10",
+    "SNOMED CT",
+    "LOINC",
+    "health informatics",
+    "Z3",
+    "SMT"
+  ],
+
+  "creators": [
+    {
+      "name": "FM-2 Project Contributors",
+      "affiliation": "FM-2 Project"
+    }
+  ],
+
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/fm2-project/cairn",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://pypi.org/project/cairn/",
+      "relation": "isIdenticalTo",
+      "resource_type": "software"
+    }
+  ],
+
+  "references": [
+    "Allen, J.F. (1983). Maintaining knowledge about temporal intervals. Communications of the ACM, 26(11), 832-843.",
+    "HL7 International. FHIR R4. https://hl7.org/fhir/R4/",
+    "openEHR Foundation. openEHR Architecture Overview. https://specifications.openehr.org/",
+    "ISO 23903:2021 Health informatics — Interoperability and integration reference architecture.",
+    "de Moura, L., Bjorner, N. (2008). Z3: An Efficient SMT Solver. TACAS 2008."
+  ],
+
+  "subjects": [
+    {
+      "term": "Health informatics",
+      "identifier": "https://id.loc.gov/subjects/sh85059830",
+      "scheme": "url"
+    },
+    {
+      "term": "Medical informatics",
+      "identifier": "https://id.loc.gov/subjects/sh85082572",
+      "scheme": "url"
+    }
+  ],
+
+  "resource_type": {
+    "type": "software"
+  },
+
+  "access_right": "open",
+
+  "notes": "CAIRN is NOT a medical device as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG (Deutschland). It is intended exclusively for research, education, and interoperability system validation. It does not process real patient data in production contexts and does not provide clinical decision support."
+}
