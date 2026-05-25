@@ -41,6 +41,10 @@ KNOWN_LOSSES: dict[tuple[str, str], list[str]] = {
     ("http://snomed.info/sct",      "http://hl7.org/fhir/sid/icd-10"):            ["laterality", "morphology", "severity"],
     ("http://loinc.org",            "http://fhir.de/CodeSystem/dimdi/icd-10-gm"): ["panel", "method", "specimen"],
     ("http://www.whocc.no/atc",     "http://fhir.de/CodeSystem/dimdi/icd-10-gm"): ["substance", "route", "dose"],
+    ("http://www.whocc.no/atc",     "http://snomed.info/sct"):                     ["route", "dose", "substance"],
+    ("http://fhir.de/CodeSystem/dimdi/ops", "http://snomed.info/sct"):             ["laterality", "approach"],
+    ("http://loinc.org",            "http://snomed.info/sct"):                     ["method", "specimen", "panel"],
+    ("http://hl7.org/fhir/sid/icd-10-cm", "http://fhir.de/CodeSystem/dimdi/icd-10-gm"): ["manifestation", "etiology"],
 }
 
 

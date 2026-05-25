@@ -216,6 +216,40 @@ class TestCardinalityCollapse:
         assert "Z87.3" in missing_codes
 
 
+# ── 3b. Terminology drift ────────────────────────────────────────────────────
+
+class TestTerminologyDrift:
+
+    def test_snomed_to_icd10_drift_detected(self):
+        """SNOMED laterality+morphology → ICD-10-GM: SILD must detect DRIFT."""
+        cdr = make_collection(
+            FMEvent(
+                event_type=TypeNode("AllergyIntolerance", "cairn"),
+                value_set={
+                    "code": "416098002",
+                    "system": "http://snomed.info/sct",
+                    "laterality": "left",
+                    "morphology": "urticaria",
+                },
+            ),
+            label="CDR",
+        )
+        fhir = make_collection(
+            FMEvent(
+                event_type=TypeNode("AllergyIntolerance", "cairn"),
+                value_set={
+                    "code": "416098002",
+                    "system": "http://fhir.de/CodeSystem/dimdi/icd-10-gm",
+                },
+            ),
+            label="FHIR",
+        )
+
+        report = SILDAnalyzer().compare(cdr, fhir)
+        drift_findings = report.by_classification(SILDClassification.DRIFT)
+        assert len(drift_findings) >= 1
+
+
 # ── 5. No loss — clean mapping ────────────────────────────────────────────────
 
 class TestNoLoss:

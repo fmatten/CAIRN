@@ -96,18 +96,23 @@ class HomomorphismChecker:
             fhir_count=len(fhir),
         )
 
-        # Build lookup: code → FHIR event
-        fhir_by_code: dict[str, FMEvent] = {}
+        # Build lookup: code → list of FHIR events (preserve duplicates)
+        fhir_by_code: dict[str, list[FMEvent]] = {}
         for e in fhir:
             code = e.get_code()
             if code:
-                fhir_by_code[code] = e
+                fhir_by_code.setdefault(code, []).append(e)
 
         fhir_codes_matched: set[str] = set()
 
         for cdr_event in cdr:
             code = cdr_event.get_code()
-            fhir_event = fhir_by_code.get(code) if code else None
+            # Pop the first available FHIR event for this code to avoid double-matching
+            fhir_event: Optional[FMEvent] = None
+            if code and fhir_by_code.get(code):
+                fhir_event = fhir_by_code[code].pop(0)
+                if not fhir_by_code[code]:
+                    del fhir_by_code[code]
 
             # ── Negation dropped ──────────────────────────────────────────────
             if cdr_event.get_negation() and fhir_event is None:

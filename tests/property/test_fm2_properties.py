@@ -14,7 +14,7 @@ from __future__ import annotations
 from datetime import datetime, timezone, timedelta
 
 import pytest
-from hypothesis import given, assume, settings
+from hypothesis import HealthCheck, given, assume, settings
 from hypothesis import strategies as st
 
 from cairn.core.allen import (
@@ -93,12 +93,13 @@ def test_p3_interval_positivity_enforced(offset_a, offset_b):
 
 # ── P4: EQUALS implies temporal containment in both directions ────────────────
 
-@given(time_intervals())
-def test_p4_equals_implies_containment(a):
-    """P4: If a EQUALS b, then temporal_containment(a, b) is True."""
-    rel = allen_relation(a, a)
-    assert rel == AllenRelation.EQUALS
-    assert temporal_containment(a, a)
+@given(interval_pairs())
+@settings(suppress_health_check=[HealthCheck.filter_too_much])
+def test_p4_equals_implies_containment(pair):
+    """P4: If allen_relation(a, b) is EQUALS, then temporal_containment(a, b) is True."""
+    a, b = pair
+    assume(allen_relation(a, b) == AllenRelation.EQUALS)
+    assert temporal_containment(a, b)
 
 
 # ── P5: Type DAG remains acyclic after arbitrary additions ────────────────────

@@ -148,7 +148,7 @@ def temporal_containment(a: TimeInterval, b: TimeInterval) -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 
 PRECISION_LOSS_RELATIONS: set[AllenRelation] = {
-    AllenRelation.CONTAINS,      # CDR interval strictly inside FHIR interval
+    AllenRelation.CONTAINS,      # CDR contains FHIR interval — CDR less precise, noteworthy
     AllenRelation.OVERLAPS,      # Partial overlap — boundary information lost
     AllenRelation.OVERLAPPED_BY, # Partial overlap — boundary information lost
     AllenRelation.DURING,        # FHIR interval inside CDR — unusual, noteworthy

@@ -25,6 +25,7 @@ from datetime import datetime
 from enum import Enum, auto
 from typing import Optional
 
+from cairn.analysis.terminology import TerminologyDriftChecker
 from cairn.core.allen import AllenRelation, allen_relation
 from cairn.core.event import EventCollection, FMEvent
 from cairn.core.homomorphism import HomomorphismChecker
@@ -177,6 +178,7 @@ class SILDAnalyzer:
         cdr: EventCollection,
         fhir: EventCollection,
         mapping_version: str = "1.0.0",
+        reference_report: Optional["SILDReport"] = None,
     ) -> SILDReport:
         report = SILDReport(
             source_label=cdr.source_label,
@@ -186,13 +188,22 @@ class SILDAnalyzer:
             mapping_version=mapping_version,
         )
 
-        fhir_by_code: dict[str, FMEvent] = {
-            e.get_code(): e for e in fhir if e.get_code()
-        }
+        # H-1: Use list to handle multiple events with the same code
+        fhir_by_code: dict[str, list[FMEvent]] = {}
+        for e in fhir:
+            code = e.get_code()
+            if code:
+                fhir_by_code.setdefault(code, []).append(e)
+
+        # Track which event_codes already have findings (M-2: avoid double-counting)
+        reported_codes: set[str] = set()
 
         for cdr_event in cdr:
             code = cdr_event.get_code() or "unknown"
-            fhir_event = fhir_by_code.get(code)
+            # H-1: pick the first available FHIR event for this code
+            fhir_event: Optional[FMEvent] = None
+            if fhir_by_code.get(code):
+                fhir_event = fhir_by_code[code][0]
 
             # ── Silent loss: event completely absent in FHIR ───────────────
             if fhir_event is None:
@@ -211,6 +222,7 @@ class SILDAnalyzer:
                     fhir_value="∅",
                     severity=severity,
                 ))
+                reported_codes.add(code)
                 continue
 
             # ── Temporal precision loss ────────────────────────────────────
@@ -237,6 +249,7 @@ class SILDAnalyzer:
                         z3_results=[z3_result],
                         severity="HIGH",
                     ))
+                    reported_codes.add(code)
 
             elif cdr_event.has_temporal() and not fhir_event.has_temporal():
                 report.add_finding(SILDFinding(
@@ -248,6 +261,7 @@ class SILDAnalyzer:
                     fhir_value="null",
                     severity="HIGH",
                 ))
+                reported_codes.add(code)
 
             # ── Value-space containment ────────────────────────────────────
             z3_vs = self._verifier.prove_value_space_contained(cdr_event, fhir_event)
@@ -262,17 +276,70 @@ class SILDAnalyzer:
                     z3_results=[z3_vs],
                     severity="MEDIUM",
                 ))
+                reported_codes.add(code)
 
-        # ── Homomorphism check ─────────────────────────────────────────────
+        # ── Homomorphism check (M-2: only add non-duplicate structural findings) ──
         homo_result = self._homo_checker.check(cdr, fhir)
         if not homo_result.is_homomorphism:
             for detail in homo_result.details:
+                # M-2: skip CARDINALITY_COLLAPSED / NEGATION_DROPPED for codes
+                # already reported as SILENT_LOSS in the main loop
+                skip = False
+                for already_reported in reported_codes:
+                    if already_reported in detail and already_reported != "STRUCTURE":
+                        skip = True
+                        break
+                if not skip:
+                    report.add_finding(SILDFinding(
+                        classification=SILDClassification.PERSISTENT,
+                        event_code="STRUCTURE",
+                        event_type="Homomorphism",
+                        description=detail,
+                        severity="MEDIUM",
+                    ))
+
+        # ── Terminology drift check (K-1) ──────────────────────────────────
+        drift_findings = TerminologyDriftChecker().check(cdr, fhir)
+        for finding in drift_findings:
+            report.add_finding(SILDFinding(
+                classification=SILDClassification.DRIFT,
+                event_code=finding.code,
+                event_type="TerminologyDrift",
+                description=finding.description,
+                cdr_value=finding.source_system,
+                fhir_value=finding.target_system,
+                severity=finding.severity.name,
+            ))
+
+        # ── K-2: IMPROVEMENT classification vs reference report ───────────
+        if reference_report is not None:
+            # Collect codes that were REGRESSION or SILENT_LOSS in the reference
+            ref_loss_codes: set[str] = {
+                f.event_code
+                for f in reference_report.findings
+                if f.classification in (
+                    SILDClassification.REGRESSION,
+                    SILDClassification.SILENT_LOSS,
+                )
+            }
+            # Current report codes with REGRESSION or SILENT_LOSS
+            current_loss_codes: set[str] = {
+                f.event_code
+                for f in report.findings
+                if f.classification in (
+                    SILDClassification.REGRESSION,
+                    SILDClassification.SILENT_LOSS,
+                )
+            }
+            # Codes that were lost before but are now fixed
+            improved_codes = ref_loss_codes - current_loss_codes
+            for improved_code in sorted(improved_codes):
                 report.add_finding(SILDFinding(
-                    classification=SILDClassification.PERSISTENT,
-                    event_code="STRUCTURE",
-                    event_type="Homomorphism",
-                    description=detail,
-                    severity="MEDIUM",
+                    classification=SILDClassification.IMPROVEMENT,
+                    event_code=improved_code,
+                    event_type="Improvement",
+                    description=f"Previously lost information now preserved for code {improved_code}",
+                    severity="LOW",
                 ))
 
         return report
