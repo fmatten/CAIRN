@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cairn-clinical"
-version = "1.0.3"
+version = "1.0.4"
 description = "FM-2 formal verification of CDR-to-FHIR mappings — Allen algebra, Z3 SMT proofs, SILD silent information loss detection."
 readme = "README.md"
 license = { file = "LICENCE" }
