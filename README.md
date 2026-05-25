@@ -240,6 +240,16 @@ See [NOTICE](./NOTICE) for the complete disclaimer.
 
 ---
 
+## Related Projects
+
+| Project | Description | DOI / Link |
+|---|---|---|
+| **FM-4 / SILD** | Signal-Loss Inspection at Data-boundaries — Theoriepaper zu CAIRN | [10.5281/zenodo.20375435](https://doi.org/10.5281/zenodo.20375435) |
+| **SILD Stack** | FM-4 konformer Monitoring-Stack (HL7 v2 · FHIR R4 · Prometheus · Grafana) | [github.com/fmatten/SILD](https://github.com/fmatten/SILD) |
+| **AION** | FM-3: Algebraic Interval Ontology for Clinical Networks | [codeberg.org/fm2-project/aion](https://codeberg.org/fm2-project/aion) |
+
+---
+
 ## Contributing
 
 Contributions are welcome under EUPL-1.2.
