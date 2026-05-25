@@ -5,6 +5,31 @@ Format: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.1] — 2026-05-25
+
+### FM-2 Compliance Fixes (9 findings closed)
+
+**Critical**
+- K-1: `TerminologyDriftChecker` integrated into `SILDAnalyzer.compare()` — DRIFT findings now emitted at runtime for all 8 known system-pair mappings
+- K-2: `compare()` accepts optional `reference_report` parameter — IMPROVEMENT findings emitted for event codes resolved since previous version
+
+**High**
+- H-1: Fixed silent data loss in `fhir_by_code` lookup — changed from `dict[str, FMEvent]` (last-write-wins) to `dict[str, list[FMEvent]]` with pop-based matching in both `SILDAnalyzer` and `HomomorphismChecker`
+- H-2: Added integration test `TestTerminologyDrift` for Loss Pattern 3 (SNOMED laterality → ICD-10-GM)
+
+**Medium**
+- M-1: Corrected misleading comment for `AllenRelation.CONTAINS` in `PRECISION_LOSS_RELATIONS` (allen.py)
+- M-2: Added `reported_codes` set in `SILDAnalyzer` to prevent homomorphism checker from double-reporting findings already classified as SILENT_LOSS or REGRESSION
+- M-3: Property test P4 (`test_p4_equals_implies_containment`) now uses `interval_pairs()` + `assume()` instead of trivial self-containment
+
+**Low**
+- N-1: Added unit tests for CLI (`test_cli.py`) and FastAPI REST API (`test_api.py`)
+- N-2: Extended `KNOWN_LOSSES` in `TerminologyDriftChecker` with 4 additional system-pair mappings: ATC→SNOMED, OPS→SNOMED, LOINC→SNOMED, ICD-10-CM→ICD-10-GM
+
+**Tests**: 50 passed (was 40) — +10 new tests across unit, integration, property suites
+
+---
+
 ## [1.0.0] — 2025-01-01
 
 ### Initial Release
@@ -36,7 +61,7 @@ Format: [Semantic Versioning](https://semver.org/)
 - Integration tests for all 5 canonical loss patterns
 
 **Licence**: EUPL-1.2
-**Platform**: Codeberg — https://codeberg.org/fm2-project/cairn
+**Platform**: Codeberg — https://codeberg.org/fm2-project/cairn · GitHub — https://github.com/fmatten/CAIRN
 **NOT a medical device** (EU MDR 2017/745 / MPDG)
 
 ---
@@ -48,5 +73,4 @@ Format: [Semantic Versioning](https://semver.org/)
 - Woodpecker CI/CD pipeline
 - openEHR ADL/OPT adapter
 - IPS conformance checker
-- Delta analyzer (mapping regression/improvement across versions)
 - PyPI publication as `cairn`
