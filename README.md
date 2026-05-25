@@ -246,7 +246,7 @@ Contributions are welcome under EUPL-1.2.
 By contributing, you agree your changes will be returned to the reference system.
 
 - Issues: https://github.com/fmatten/CAIRN/issues
-- Mirror: https://codeberg.org/fm2-project/cairn
+- Mirror: https://codeberg.org/iscad/cairn
 - Guide: [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ---

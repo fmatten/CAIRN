@@ -34,7 +34,7 @@
       "resource_type": "software"
     },
     {
-      "identifier": "https://codeberg.org/fm2-project/cairn",
+      "identifier": "https://codeberg.org/iscad/cairn",
       "relation": "isSupplementTo",
       "resource_type": "software"
     },
