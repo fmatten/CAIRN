@@ -13,23 +13,34 @@ abstract: >
   graph (DAG), Allen temporal algebra (13 interval relations), and a universal
   event model as a 6-tuple. CAIRN includes SILD (Silent Information Loss
   Detector), which formally verifies CDR-to-FHIR mappings using Z3 SMT proofs.
+  Version 1.0.1 closes 9 FM-2 compliance gaps including full DRIFT classification,
+  IMPROVEMENT detection across mapping versions, multi-event code handling,
+  and extended terminology drift coverage (8 system-pair mappings).
 
   NOT a medical device (EU MDR 2017/745 / MPDG).
 
-version: "1.0.0"
+version: "1.0.1"
 
-date-released: "2025-01-01"
+date-released: "2026-05-25"
 
 license: EUPL-1.2
 
-repository-code: "https://codeberg.org/fm2-project/cairn"
+repository-code: "https://github.com/fmatten/CAIRN"
 
-url: "https://codeberg.org/fm2-project/cairn"
+url: "https://github.com/fmatten/CAIRN"
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.15475376"
+    description: "Zenodo archive — CAIRN 1.0.0 source"
 
 type: software
 
 authors:
-  - name: "FM-2 Project Contributors"
+  - family-names: "Matten"
+    given-names: "Friedhelm"
+    email: "friedhelm.matten@iscad-it.de"
+    orcid: ""
 
 keywords:
   - FHIR
@@ -45,6 +56,9 @@ keywords:
   - health informatics
   - Z3
   - SMT
+  - CDR
+  - terminology drift
+  - graph homomorphism
 
 references:
   - type: article
