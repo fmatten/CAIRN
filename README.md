@@ -217,14 +217,30 @@ tests/property/     6 tests  (Hypothesis: FM-2 invariants P1–P6)
 
 ## Licence
 
-CAIRN is licensed under the **GNU Affero General Public License v3 (AGPL-3.0-only OR Commercial)**.
+CAIRN is **dual-licensed**: **AGPL-3.0-only** (open source) **OR Commercial** (ISCaD GmbH).
+
+### Open Source — AGPL-3.0-only
 
 - Free to use, modify, and distribute
-- Modifications **must be contributed back** under the same licence
-- Copyleft covers network use (SaaS)
-- Legally valid in all EU member states in their official languages
+- Modifications **must be contributed back** under AGPL-3.0
+- Copyleft covers **network use (SaaS)** — clinical SaaS deployments must open their source
+- Full text: [LICENCE](./LICENCE)
 
-See [LICENCE](./LICENCE) for the full text.
+### Commercial Licence
+
+A commercial licence is available for:
+- Proprietary integration or redistribution
+- Deployments where AGPL-3.0 copyleft obligations are not suitable
+- OEM embedding, support & warranty arrangements
+
+Contact: **friedhelm.matten@iscad-it.de**  
+Details: [LICENSE-COMMERCIAL.md](./LICENSE-COMMERCIAL.md)
+
+### SPDX
+
+```
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
+```
 
 ---
 
@@ -253,8 +269,8 @@ See [NOTICE](./NOTICE) for the complete disclaimer.
 
 ## Contributing
 
-Contributions are welcome under AGPL-3.0 OR Commercial.
-By contributing, you agree your changes will be returned to the reference system.
+Contributions are welcome under AGPL-3.0-only.
+By contributing, you agree your changes will be returned under the same licence (AGPL-3.0-only).
 
 - Issues: https://github.com/fmatten/CAIRN/issues
 - Mirror: https://codeberg.org/iscad/cairn
@@ -271,7 +287,7 @@ By contributing, you agree your changes will be returned to the reference system
   year    = {2026},
   doi     = {10.5281/zenodo.20375036},
   url     = {https://github.com/fmatten/CAIRN},
-  licence = {AGPL-3.0-only},
-  version = {1.0.1}
+  licence = {AGPL-3.0-only OR LicenseRef-ISCaD-Commercial},
+  version = {1.0.4}
 }
 ```
