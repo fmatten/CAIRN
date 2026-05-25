@@ -4,18 +4,29 @@ Thank you for your interest in contributing to CAIRN.
 
 ## Licence and Copyleft
 
-CAIRN is licensed under **EUPL-1.2**. By contributing, you agree that:
+CAIRN is **dual-licensed**: **AGPL-3.0-only OR Commercial** (ISCaD GmbH).
 
-- Your contributions are licensed under the same EUPL-1.2 licence
+By contributing, you agree that:
+
+- Your contributions are licensed under **AGPL-3.0-only**
 - **Modifications must be returned** to the reference system (copyleft clause)
 - You have the right to contribute the code you submit
+- ISCaD GmbH may offer your contribution under the commercial licence
 
-This ensures CAIRN remains a true open reference architecture — not a fork base for proprietary derivates.
+This ensures CAIRN remains a true open reference architecture — not a fork base for proprietary derivatives.
+
+### SPDX header for new files
+
+```text
+SPDX-FileCopyrightText: 2026 Friedhelm Matten / ISCaD GmbH
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
+```
 
 ## How to Contribute
 
 ### Bug Reports and Feature Requests
-Open an issue at: https://codeberg.org/iscad/cairn/issues
+
+Open an issue at: https://github.com/fmatten/CAIRN/issues
 
 Please include:
 - CAIRN version (`cairn version`)
@@ -25,7 +36,7 @@ Please include:
 
 ### Pull Requests
 
-1. Fork the repository on Codeberg
+1. Fork the repository on GitHub or Codeberg
 2. Create a feature branch: `git checkout -b feature/your-feature`
 3. Write tests for your change (unit + integration)
 4. Run the test suite: `pytest`
@@ -61,12 +72,13 @@ Any PR that would move CAIRN toward medical device territory will be rejected.
 ## Development Setup
 
 ```bash
-git clone https://codeberg.org/iscad/cairn.git
-cd cairn
+git clone https://github.com/fmatten/CAIRN.git
+cd CAIRN
 pip install -e ".[dev]"
 pytest
 ```
 
 ## Questions
 
-Open a discussion at: https://codeberg.org/iscad/cairn/issues
+Open an issue at: https://github.com/fmatten/CAIRN/issues  
+Mirror: https://codeberg.org/iscad/cairn
