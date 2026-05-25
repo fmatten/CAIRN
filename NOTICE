@@ -1,11 +1,24 @@
 CAIRN — Clinical interoperability reference architecture.
 Built on FM-2.
 
-Copyright (c) 2025 FM-2 Project Contributors
-Licensed under the European Union Public Licence v. 1.2 (EUPL-1.2)
-See LICENCE for the full licence text.
+Copyright (c) 2026 Friedhelm Matten / ISCaD GmbH
 
-Repository: https://codeberg.org/fm2-project/cairn
+CAIRN is distributed under a dual-license model:
+
+  - GNU Affero General Public License v3.0 only (AGPL-3.0-only); or
+  - a separate commercial license from ISCaD GmbH.
+
+Unless a separate written commercial license agreement has been concluded
+with ISCaD GmbH, this software is provided under the AGPL-3.0-only.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
+
+Repository: https://github.com/fmatten/CAIRN
+Mirror:     https://codeberg.org/iscad/cairn
+
+For commercial licensing enquiries:
+  friedhelm.matten@iscad-it.de
+  https://iscad-it.de
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -111,16 +124,17 @@ DOCUMENTATION
   mkdocs-material   >= 9.5      MIT
   jupyter           >= 1.0      BSD-3-Clause
 
-All licences are compatible with EUPL-1.2 as per Article 5 and the
-Appendix of the EUPL-1.2 licence text.
+All third-party licences are compatible with AGPL-3.0 for use in this
+project. The AGPL-3.0 copyleft applies to CAIRN source code only, not
+to the third-party libraries listed above.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CONTRIBUTIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Contributions to CAIRN are welcome under the terms of EUPL-1.2.
+Contributions to CAIRN are welcome under the terms of AGPL-3.0-only.
 By contributing, you agree that your contributions will be licensed
-under the same licence and returned to the reference system.
+under the same licence (AGPL-3.0-only) and returned to the reference system.
 
 See CONTRIBUTING.md for guidelines.
