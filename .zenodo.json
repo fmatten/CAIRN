@@ -1,52 +1,45 @@
 {
   "title": "CAIRN — Clinical interoperability reference architecture. Built on FM-2.",
 
-  "description": "<p>CAIRN is an open-source reference architecture for formal verification of clinical interoperability mappings. It implements FM-2 — a mathematical framework modelling clinical data through a type system as a directed acyclic graph (DAG), Allen temporal algebra (13 interval relations), and a universal event model as a 6-tuple.</p><p>CAIRN includes SILD (Silent Information Loss Detector), which formally verifies CDR-to-FHIR mappings and classifies detected losses as REGRESSION, IMPROVEMENT, PERSISTENT, SILENT_LOSS, or DRIFT using Z3 SMT proofs.</p><p><strong>NOT a medical device</strong> as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG. For research and interoperability validation only.</p>",
+  "description": "<p>CAIRN is an open-source reference architecture for formal verification of clinical interoperability mappings. It implements FM-2 — a mathematical framework modelling clinical data through a type system as a directed acyclic graph (DAG), Allen temporal algebra (13 interval relations), and a universal event model as a 6-tuple.</p><p>CAIRN includes SILD (Silent Information Loss Detector), which formally verifies CDR-to-FHIR mappings and classifies detected losses as REGRESSION, IMPROVEMENT, PERSISTENT, SILENT_LOSS, or DRIFT using Z3 SMT proofs.</p><p>Version 1.0.1 closes 9 FM-2 compliance gaps: full DRIFT classification, IMPROVEMENT detection across mapping versions, multi-event code handling, extended terminology drift coverage (8 system-pair mappings), CLI/API tests, and corrected Allen algebra documentation. 50 tests pass.</p><p>Published on PyPI as <code>cairn-clinical</code> (<code>pip install cairn-clinical</code>).</p><p><strong>NOT a medical device</strong> as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG. For research and interoperability validation only.</p>",
 
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "upload_type": "software",
 
-  "publication_date": "2025-01-01",
+  "publication_date": "2026-05-25",
 
   "license": "eupl-1.2",
 
   "language": "eng",
 
   "keywords": [
-    "FHIR",
-    "HL7",
-    "interoperability",
-    "formal verification",
-    "Allen algebra",
-    "clinical informatics",
-    "information loss",
-    "SILD",
-    "FM-2",
-    "openEHR",
-    "ICD-10",
-    "SNOMED CT",
-    "LOINC",
-    "health informatics",
-    "Z3",
-    "SMT"
+    "FHIR", "HL7", "interoperability", "formal verification", "Allen algebra",
+    "clinical informatics", "information loss", "SILD", "FM-2", "openEHR",
+    "ICD-10", "SNOMED CT", "LOINC", "health informatics", "Z3", "SMT",
+    "CDR", "terminology drift", "graph homomorphism"
   ],
 
   "creators": [
     {
-      "name": "FM-2 Project Contributors",
-      "affiliation": "FM-2 Project"
+      "name": "Matten, Friedhelm",
+      "affiliation": "ISCAD IT"
     }
   ],
 
   "related_identifiers": [
+    {
+      "identifier": "https://github.com/fmatten/CAIRN",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
     {
       "identifier": "https://codeberg.org/fm2-project/cairn",
       "relation": "isSupplementTo",
       "resource_type": "software"
     },
     {
-      "identifier": "https://pypi.org/project/cairn/",
+      "identifier": "https://pypi.org/project/cairn-clinical/",
       "relation": "isIdenticalTo",
       "resource_type": "software"
     }
@@ -73,11 +66,9 @@
     }
   ],
 
-  "resource_type": {
-    "type": "software"
-  },
+  "resource_type": { "type": "software" },
 
   "access_right": "open",
 
-  "notes": "CAIRN is NOT a medical device as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG (Deutschland). It is intended exclusively for research, education, and interoperability system validation. It does not process real patient data in production contexts and does not provide clinical decision support."
+  "notes": "CAIRN is NOT a medical device as defined by EU MDR 2017/745, EU IVDR 2017/746, or MPDG (Deutschland). It is intended exclusively for research, education, and interoperability system validation."
 }
