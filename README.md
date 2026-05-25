@@ -2,9 +2,11 @@
 
 **Clinical interoperability reference architecture. Built on FM-2.**
 
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/fmatten/CAIRN/releases)
 [![Licence: EUPL-1.2](https://img.shields.io/badge/Licence-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![CI](https://ci.codeberg.org/api/badges/fm2-project/cairn/status.svg)](https://ci.codeberg.org/fm2-project/cairn)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15475376.svg)](https://doi.org/10.5281/zenodo.15475376)
+[![Tests](https://img.shields.io/badge/tests-50%20passed-brightgreen.svg)](https://github.com/fmatten/CAIRN)
 [![NOT a Medical Device](https://img.shields.io/badge/NOT%20a-Medical%20Device-important.svg)](#not-a-medical-device)
 
 ---
@@ -85,16 +87,17 @@ report.print_summary()
 
 ```
 ════════════════════════════════════════════════════════════════
- CAIRN / SILD Report  —  2025-01-01 09:00
+ CAIRN / SILD Report  —  2026-05-25 09:00
 ════════════════════════════════════════════════════════════════
  Source : CDR  (5 events)
  Target : FHIR-R4  (3 events)
 ────────────────────────────────────────────────────────────────
  [SILENT_LOSS|CRITICAL] AllergyStatement/716186003: Negated event absent in FHIR
  [REGRESSION|HIGH]      Anaesthesia/72641008: Temporal precision lost (215min → 1439min)
+ [DRIFT|HIGH]           TerminologyDrift/416098002: SNOMED laterality → ICD-10-GM (lost)
  [REGRESSION|MEDIUM]    LabResult/2093-3: Value-space not preserved: missing referenceRange
 ────────────────────────────────────────────────────────────────
- Total: 3 findings | 2 regressions | 1 silent losses | 1 critical
+ Total: 4 findings | 2 regressions | 1 silent losses | 1 critical
 ════════════════════════════════════════════════════════════════
 ```
 
@@ -106,6 +109,17 @@ cairn variance --files a.csv:HausA:Orbis  --files b.csv:HausB:iMedOne
 cairn version
 ```
 
+### Version comparison (IMPROVEMENT detection)
+
+```python
+# Compare two mapping versions — detect improvements and regressions
+report_v1 = SILDAnalyzer().compare(cdr_events, fhir_v1_events, mapping_version="1.0")
+report_v2 = SILDAnalyzer().compare(cdr_events, fhir_v2_events, mapping_version="2.0",
+                                    reference_report=report_v1)
+# IMPROVEMENT findings mark event codes resolved since v1
+report_v2.print_summary()
+```
+
 ---
 
 ## Modules
@@ -113,9 +127,9 @@ cairn version
 | Module | Contents |
 |---|---|
 | `cairn.core` | Type DAG · Allen algebra (13 relations) · 6-tuple event model · Homomorphism checker |
-| `cairn.verification` | Z3 SMT proofs · Value-space containment · SILD engine |
+| `cairn.verification` | Z3 SMT proofs · Value-space containment · SILD engine (all 6 classifications) |
 | `cairn.adapters` | FHIR R4 · HL7 v2 (ORU/ADT/RXA) · CSV/DataFrame |
-| `cairn.analysis` | Cohort queries φA–φD · Terminology drift · Multi-site KIS variance |
+| `cairn.analysis` | Cohort queries φA–φD · Terminology drift (8 system pairs) · Multi-site KIS variance |
 | `cairn.api` | FastAPI REST (`POST /verify` · `POST /drift` · `GET /health`) |
 | `cairn.cli` | Click CLI (`verify` · `drift` · `variance` · `version`) |
 
@@ -132,7 +146,7 @@ cairn/
 │   └── type_dag.py       # Type system as directed acyclic graph
 │
 ├── verification/
-│   ├── sild.py           # Silent Information Loss Detector
+│   ├── sild.py           # Silent Information Loss Detector (SILD)
 │   └── z3_proofs.py      # Z3 SMT formal proofs
 │
 ├── adapters/
@@ -142,7 +156,7 @@ cairn/
 │
 ├── analysis/
 │   ├── cohort.py         # FM-2 cohort queries φA–φD
-│   ├── terminology.py    # Terminology drift checker
+│   ├── terminology.py    # Terminology drift checker (8 system-pair mappings)
 │   └── variance.py       # Multi-site completeness variance (KIS comparison)
 │
 ├── api/
@@ -152,8 +166,8 @@ cairn/
     └── commands.py       # Click command-line interface
 
 tests/
-├── unit/                 # FM-2 core — all 13 Allen relations, DAG, event model
-├── integration/          # SILD — all 5 real-world loss patterns
+├── unit/                 # FM-2 core + CLI + API (32 tests)
+├── integration/          # SILD — all 5 real-world loss patterns + drift (8 tests)
 └── property/             # Hypothesis property tests — FM-2 invariants P1–P6
 ```
 
@@ -177,6 +191,7 @@ hl7            >= 0.4    # HL7 v2 parsing               BSD-3-Clause
 
 # API & CLI
 fastapi        >= 0.110  # REST API                      MIT
+httpx          >= 0.27   # API test client               BSD-3-Clause
 click          >= 8.1    # CLI                           BSD-3-Clause
 ```
 
@@ -190,10 +205,10 @@ pytest tests/ -v
 ```
 
 ```
-40 passed in 4.35s
+50 passed in 3.16s
 
-tests/unit/        30 tests  (Type DAG · Allen algebra · event model)
-tests/integration/  7 tests  (5 SILD loss patterns)
+tests/unit/        32 tests  (Type DAG · Allen algebra · event model · CLI · API)
+tests/integration/  8 tests  (5 SILD loss patterns + terminology drift)
 tests/property/     6 tests  (Hypothesis: FM-2 invariants P1–P6)
 ```
 
@@ -229,7 +244,8 @@ See [NOTICE](./NOTICE) for the complete disclaimer.
 Contributions are welcome under EUPL-1.2.
 By contributing, you agree your changes will be returned to the reference system.
 
-- Issues: https://codeberg.org/fm2-project/cairn/issues
+- Issues: https://github.com/fmatten/CAIRN/issues
+- Mirror: https://codeberg.org/fm2-project/cairn
 - Guide: [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ---
@@ -237,12 +253,13 @@ By contributing, you agree your changes will be returned to the reference system
 ## Citation
 
 ```bibtex
-@software{cairn2025,
+@software{cairn2026,
   title   = {CAIRN — Clinical interoperability reference architecture},
-  author  = {FM-2 Project Contributors},
-  year    = {2025},
-  url     = {https://codeberg.org/fm2-project/cairn},
+  author  = {Matten, Friedhelm},
+  year    = {2026},
+  doi     = {10.5281/zenodo.15475376},
+  url     = {https://github.com/fmatten/CAIRN},
   licence = {EUPL-1.2},
-  version = {1.0.0}
+  version = {1.0.1}
 }
 ```
