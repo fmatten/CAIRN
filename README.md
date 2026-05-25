@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/fmatten/CAIRN/releases)
 [![Licence: EUPL-1.2](https://img.shields.io/badge/Licence-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15475376.svg)](https://doi.org/10.5281/zenodo.15475376)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20375036.svg)](https://doi.org/10.5281/zenodo.20375036)
 [![PyPI](https://img.shields.io/pypi/v/cairn-clinical.svg)](https://pypi.org/project/cairn-clinical/)
 [![Tests](https://img.shields.io/badge/tests-50%20passed-brightgreen.svg)](https://github.com/fmatten/CAIRN)
 [![NOT a Medical Device](https://img.shields.io/badge/NOT%20a-Medical%20Device-important.svg)](#not-a-medical-device)
@@ -258,7 +258,7 @@ By contributing, you agree your changes will be returned to the reference system
   title   = {CAIRN — Clinical interoperability reference architecture},
   author  = {Matten, Friedhelm},
   year    = {2026},
-  doi     = {10.5281/zenodo.15475376},
+  doi     = {10.5281/zenodo.20375036},
   url     = {https://github.com/fmatten/CAIRN},
   licence = {EUPL-1.2},
   version = {1.0.1}

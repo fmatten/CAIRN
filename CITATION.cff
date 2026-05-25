@@ -31,7 +31,7 @@ url: "https://github.com/fmatten/CAIRN"
 
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.15475376"
+    value: "10.5281/zenodo.20375036"
     description: "Zenodo archive — CAIRN 1.0.0 source"
 
 type: software

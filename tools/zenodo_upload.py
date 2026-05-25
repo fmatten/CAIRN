@@ -27,7 +27,7 @@ import requests
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 
-RECORD_ID       = "15475376"         # Zenodo record ID (from DOI 10.5281/zenodo.15475376)
+RECORD_ID       = "19483182"         # Zenodo deposit ID for CAIRN
 ZENODO_BASE_URL = "https://zenodo.org/api"
 REPO_ROOT       = Path(__file__).parent.parent
 
@@ -94,7 +94,7 @@ def run(token: str, dry_run: bool = False) -> None:
             all_ok = False
 
         print(f"\n[DRY-RUN] Ziel ...")
-        print(f"  → Zenodo Record : https://zenodo.org/records/{RECORD_ID}")
+        print(f"  → Zenodo Record : https://zenodo.org/deposit/{RECORD_ID}")
         print(f"  → Neue Version  : v1.0.1")
         print(f"  → Gesamtgröße   : {total_bytes // 1024} KB")
         print(f"\n[DRY-RUN] {'✅ Bereit für Upload.' if all_ok else '❌ Bitte fehlende Dateien ergänzen.'}")
