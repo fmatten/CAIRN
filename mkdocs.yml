@@ -1,8 +1,8 @@
 site_name: CAIRN
 site_description: Clinical interoperability reference architecture. Built on FM-2.
-site_url: https://fm2-project.codeberg.page/cairn
-repo_url: https://codeberg.org/fm2-project/cairn
-repo_name: fm2-project/cairn
+site_url: https://codeberg.org/iscad/cairn
+repo_url: https://codeberg.org/iscad/cairn
+repo_name: iscad/cairn
 edit_uri: _edit/main/docs/
 
 theme:
@@ -64,7 +64,7 @@ markdown_extensions:
 extra:
   social:
     - icon: simple/codeberg
-      link: https://codeberg.org/fm2-project/cairn
+      link: https://codeberg.org/iscad/cairn
 
   version:
     provider: mike

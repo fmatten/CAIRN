@@ -100,7 +100,7 @@ Repository    = "https://github.com/fmatten/CAIRN"
 Issues        = "https://github.com/fmatten/CAIRN/issues"
 Changelog     = "https://github.com/fmatten/CAIRN/blob/master/CHANGELOG.md"
 Documentation = "https://github.com/fmatten/CAIRN#readme"
-Mirror        = "https://codeberg.org/fm2-project/cairn"
+Mirror        = "https://codeberg.org/iscad/cairn"
 
 
 [tool.hatch.build.targets.wheel]

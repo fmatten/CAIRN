@@ -63,7 +63,7 @@ Format: [Semantic Versioning](https://semver.org/)
 - Integration tests for all 5 canonical loss patterns
 
 **Licence**: EUPL-1.2
-**Platform**: Codeberg — https://codeberg.org/fm2-project/cairn · GitHub — https://github.com/fmatten/CAIRN
+**Platform**: Codeberg — https://codeberg.org/iscad/cairn · GitHub — https://github.com/fmatten/CAIRN
 **NOT a medical device** (EU MDR 2017/745 / MPDG)
 
 ---

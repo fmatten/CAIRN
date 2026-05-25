@@ -2,7 +2,7 @@
 
 ## Repository Settings
 
-After creating the repository at https://codeberg.org/fm2-project/cairn,
+After creating the repository at https://codeberg.org/iscad/cairn,
 configure the following settings in the Codeberg web interface:
 
 ### Basic Settings
@@ -11,7 +11,7 @@ configure the following settings in the Codeberg web interface:
 |---|---|
 | Repository name | `cairn` |
 | Description | `Clinical interoperability reference architecture. Built on FM-2.` |
-| Website | `https://codeberg.org/fm2-project/cairn` |
+| Website | `https://codeberg.org/iscad/cairn` |
 | Visibility | Public |
 | Default branch | `main` |
 
@@ -36,7 +36,7 @@ Protect `main`:
 
 1. Go to https://ci.codeberg.org
 2. Log in with your Codeberg account
-3. Search for `fm2-project/cairn`
+3. Search for `iscad/cairn`
 4. Click "Enable"
 5. The `.woodpecker.yml` pipeline will run automatically on push
 
@@ -58,7 +58,7 @@ Create these labels in Issues → Labels:
 
 ```bash
 # Clone and initialise
-git clone https://codeberg.org/fm2-project/cairn.git
+git clone https://codeberg.org/iscad/cairn.git
 cd cairn
 
 # Copy CAIRN source files into the cloned repo
@@ -90,7 +90,7 @@ git push origin v1.0.0
 ## Codeberg Release
 
 After push, create a release at:
-https://codeberg.org/fm2-project/cairn/releases/new
+https://codeberg.org/iscad/cairn/releases/new
 
 | Field | Value |
 |---|---|
