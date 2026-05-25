@@ -28,6 +28,8 @@ Format: [Semantic Versioning](https://semver.org/)
 
 **Tests**: 50 passed (was 40) — +10 new tests across unit, integration, property suites
 
+**PyPI**: Published as [`cairn-clinical`](https://pypi.org/project/cairn-clinical/) (`pip install cairn-clinical`)
+
 ---
 
 ## [1.0.0] — 2025-01-01

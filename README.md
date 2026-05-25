@@ -6,6 +6,7 @@
 [![Licence: EUPL-1.2](https://img.shields.io/badge/Licence-EUPL--1.2-blue.svg)](https://eupl.eu/1.2/en/)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15475376.svg)](https://doi.org/10.5281/zenodo.15475376)
+[![PyPI](https://img.shields.io/pypi/v/cairn-clinical.svg)](https://pypi.org/project/cairn-clinical/)
 [![Tests](https://img.shields.io/badge/tests-50%20passed-brightgreen.svg)](https://github.com/fmatten/CAIRN)
 [![NOT a Medical Device](https://img.shields.io/badge/NOT%20a-Medical%20Device-important.svg)](#not-a-medical-device)
 
@@ -68,7 +69,7 @@ klinischer Daten auf Basis von:
 ## Quickstart
 
 ```bash
-pip install cairn
+pip install cairn-clinical
 ```
 
 ```python
