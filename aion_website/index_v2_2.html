@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="de" data-lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AION Clinical · ISCaD GmbH — Formale Grundlagen für klinische Daten</title>
+<meta name="description" content="AION und CAIRN — mathematisch fundierte, klinische Informationssysteme. Formal, kausal, interoperabel. ISCaD GmbH, Wedemark.">
+<link rel="canonical" href="https://aion-clinical.de/">
+<link rel="alternate" hreflang="de" href="https://aion-clinical.de/">
+<link rel="alternate" hreflang="en" href="https://aion-clinical.de/en/">
+<meta property="og:title" content="AION Clinical · ISCaD GmbH">
+<meta property="og:description" content="Formale Grundlagen für klinische Informationssysteme. AION und CAIRN.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   Tokens
+═══════════════════════════════════════ */
+:root {
+  --ink:        #0E1A12;
+  --ink-2:      #3D5045;
+  --ink-3:      #6A7D6E;
+  --ink-4:      #9AAD9D;
+  --paper:      #F7F5F0;
+  --paper-2:    #EEEAE2;
+  --paper-3:    #E4DFD5;
+  --rule:       #D0CBC0;
+  --rule-2:     rgba(14,26,18,.06);
+
+  --aion:       #0B3C5D;
+  --aion-mid:   #1F6091;
+  --aion-pale:  #EAF2FA;
+  --cairn:      #0F6E56;
+  --cairn-mid:  #1B9E7A;
+  --cairn-pale: #E6F4EF;
+  --gold:       #8B6914;
+  --gold-pale:  #F5EDD5;
+
+  --dark:       #0E1A12;
+  --dark-2:     #192A1E;
+
+  --serif: 'Playfair Display', 'Georgia', serif;
+  --sans:  'DM Sans', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+
+  --r:    4px;
+  --r-lg: 8px;
+  --max:  1140px;
+  --col:  clamp(20px, 4vw, 52px);
+}
+
+/* ═══════════════════════════════════════
+   Reset
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 18px; scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--col);
+}
+
+/* ═══════════════════════════════════════
+   Language
+═══════════════════════════════════════ */
+[data-lang="de"] .en,
+[data-lang="en"] .de { display: none; }
+
+/* ═══════════════════════════════════════
+   Nav
+═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(247,245,240,.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--col);
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--ink);
+  text-decoration: none;
+  margin-right: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
+.nav-logo em { font-style: italic; color: var(--cairn); }
+.nav-logo .nav-sub {
+  font-family: var(--sans);
+  font-size: .68rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  letter-spacing: .06em;
+  margin-left: 8px;
+  display: none;
+}
+@media (min-width: 640px) { .nav-logo .nav-sub { display: inline; } }
+
+.nav-links {
+  display: flex;
+  gap: 2px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--sans);
+  font-size: .88rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: var(--r);
+  transition: color .18s, background .18s;
+}
+.nav-links a:hover { color: var(--ink); background: var(--paper-2); }
+.nav-links a.nav-blog {
+  color: var(--cairn-mid);
+  font-weight: 500;
+  border: 1px solid var(--cairn-mid);
+  padding: 3px 10px;
+}
+.nav-links a.nav-blog:hover {
+  background: var(--cairn-pale);
+  color: var(--cairn);
+  border-color: var(--cairn);
+}
+
+.lang-sw {
+  display: flex;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.lang-sw button {
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: all .18s;
+}
+.lang-sw button.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  gap: 4px;
+  flex-direction: column;
+}
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--ink-2);
+  border-radius: 2px;
+  transition: all .25s;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    position: absolute;
+    top: 58px; left: 0; right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: 12px 24px; border-radius: 0; border-bottom: 1px solid var(--rule-2); }
+}
+
+/* ═══════════════════════════════════════
+   Hero
+═══════════════════════════════════════ */
+#hero {
+  padding-top: 58px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  min-height: 78vh;
+  align-items: stretch;
+}
+@media (max-width: 860px) { .hero-inner { grid-template-columns: 1fr; } }
+
+.hero-left {
+  padding: clamp(36px, 6vw, 72px) 0 clamp(36px, 6vw, 72px);
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (max-width: 860px) { .hero-left { border-right: none; padding-right: 0; } }
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cairn);
+  margin-bottom: clamp(16px, 3vw, 28px);
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--cairn);
+}
+
+h1.hero-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: clamp(16px, 2.5vw, 28px);
+  max-width: 660px;
+}
+h1.hero-title strong {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--cairn);
+}
+
+.hero-desc {
+  font-size: clamp(.92rem, 1.5vw, 1.05rem);
+  color: var(--ink-2);
+  max-width: 520px;
+  margin-bottom: clamp(24px, 4vw, 40px);
+  line-height: 1.7;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: .82rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: var(--r);
+  transition: all .2s;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+.btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-ink:hover { background: var(--dark-2); }
+.btn-outline {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+}
+.btn-outline:hover { border-color: var(--ink-3); color: var(--ink); background: var(--paper-2); }
+.btn-cairn {
+  background: var(--cairn);
+  color: #fff;
+}
+.btn-cairn:hover { background: var(--cairn-mid); }
+
+.hero-right {
+  padding: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--paper-2);
+}
+@media (max-width: 860px) {
+  .hero-right {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    border-top: 1px solid var(--rule);
+  }
+}
+.hero-stat {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+}
+.hero-stat-val {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.hero-stat-label {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ═══════════════════════════════════════
+   Products — AION + CAIRN split
+═══════════════════════════════════════ */
+#products {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 700px) { #products { grid-template-columns: 1fr; } }
+
+.product-col {
+  padding: clamp(32px, 5vw, 60px) clamp(20px, 4vw, 52px);
+  position: relative;
+}
+.product-col:first-child {
+  border-right: 1px solid var(--rule);
+}
+@media (max-width: 700px) {
+  .product-col:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+
+.product-mark {
+  width: 36px;
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 18px;
+}
+.mark-aion { background: var(--aion); }
+.mark-cairn { background: var(--cairn); }
+
+.product-tag {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.product-tag.aion { color: var(--aion); }
+.product-tag.cairn { color: var(--cairn); }
+
+.product-col h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+.product-col .product-full {
+  font-family: var(--mono);
+  font-size: .65rem;
+  color: var(--ink-3);
+  letter-spacing: .05em;
+  margin-bottom: 16px;
+}
+.product-col p {
+  font-size: .95rem;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.feature-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .95rem;
+  color: var(--ink-2);
+}
+.feature-list li::before {
+  content: '—';
+  flex-shrink: 0;
+  font-weight: 300;
+  color: var(--ink-4);
+  margin-top: 1px;
+}
+.feature-list.aion li::before { color: var(--aion); }
+.feature-list.cairn li::before { color: var(--cairn); }
+
+/* Code block */
+.code-block {
+  background: var(--ink);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.code-block pre {
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: rgba(247,245,240,.85);
+  line-height: 1.6;
+  white-space: pre;
+}
+.code-block pre .c { color: var(--cairn-mid); }
+.code-block pre .s { color: #c8a86e; }
+.code-block pre .k { color: #7fb3e8; }
+
+/* ═══════════════════════════════════════
+   Features section
+═══════════════════════════════════════ */
+#features {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+.features-header {
+  padding: clamp(32px, 5vw, 56px) 0 0;
+  border-bottom: 1px solid var(--rule);
+}
+.features-header .container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: clamp(24px, 3vw, 40px);
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+h2.section-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 860px) { .features-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .features-grid { grid-template-columns: 1fr; } }
+
+.feat-card {
+  padding: clamp(20px, 3vw, 32px) clamp(18px, 2.5vw, 28px);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+  transition: background .2s;
+}
+.feat-card:hover { background: var(--paper); }
+.feat-card:nth-child(3n) { border-right: none; }
+@media (max-width: 860px) {
+  .feat-card:nth-child(2n) { border-right: none; }
+  .feat-card:nth-child(3n) { border-right: 1px solid var(--rule); }
+  .feat-card:nth-child(2n+1):last-child { border-right: none; }
+}
+@media (max-width: 500px) {
+  .feat-card { border-right: none !important; }
+}
+
+.feat-num {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  color: var(--ink-4);
+  margin-bottom: 12px;
+}
+.feat-card h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.feat-card p {
+  font-size: .95rem;
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.feat-benefit {
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--cairn);
+  line-height: 1.4;
+}
+.feat-benefit::before { content: '→ '; }
+
+/* ═══════════════════════════════════════
+   Stakeholders
+═══════════════════════════════════════ */
+#stakeholders { border-bottom: 1px solid var(--rule); }
+.stakeholders-inner {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  align-items: start;
+}
+@media (max-width: 760px) { .stakeholders-inner { grid-template-columns: 1fr; } }
+
+.stakeholders-left {
+  padding: clamp(32px, 5vw, 56px) clamp(20px, 3vw, 40px) clamp(32px, 5vw, 56px) 0;
+  border-right: 1px solid var(--rule);
+  position: sticky;
+  top: 58px;
+}
+@media (max-width: 760px) {
+  .stakeholders-left { border-right: none; border-bottom: 1px solid var(--rule); padding-right: 0; position: static; }
+}
+.stakeholders-right {
+  padding: clamp(32px, 5vw, 56px) 0 clamp(32px, 5vw, 56px) clamp(24px, 3vw, 48px);
+}
+@media (max-width: 760px) { .stakeholders-right { padding-left: 0; } }
+
+.stakeholder-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 480px) { .stakeholder-cards { grid-template-columns: 1fr; } }
+
+.sh-card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+}
+.sh-card .sh-role {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cairn);
+  margin-bottom: 8px;
+  display: block;
+}
+.sh-card h4 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.sh-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sh-card li {
+  font-size: .9rem;
+  color: var(--ink-2);
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.5;
+}
+.sh-card li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--cairn);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════
+   Publications
+═══════════════════════════════════════ */
+#publications {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.pub-header {
+  padding: clamp(32px, 5vw, 56px) 0 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 0;
+}
+.pub-header .container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: clamp(20px, 3vw, 36px);
+}
+.pub-list {
+  list-style: none;
+}
+.pub-item {
+  display: grid;
+  grid-template-columns: 52px 72px 1fr auto;
+  gap: 0 20px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule-2);
+  transition: background .15s;
+}
+.pub-item:hover { background: var(--paper-2); margin: 0 calc(-1 * var(--col)); padding: 18px var(--col); }
+@media (max-width: 640px) {
+  .pub-item { grid-template-columns: 44px 1fr; grid-template-rows: auto auto; }
+  .pub-chip { grid-column: 2; }
+  .pub-doi { grid-column: 1 / -1; }
+}
+
+.pub-year {
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--ink-4);
+  letter-spacing: .05em;
+  padding-top: 2px;
+}
+.pub-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--r);
+  border: 1px solid var(--rule);
+  color: var(--ink-3);
+  background: var(--paper-2);
+}
+.pub-chip.aion { color: var(--aion); border-color: rgba(11,60,93,.2); background: var(--aion-pale); }
+.pub-chip.cairn { color: var(--cairn); border-color: rgba(15,110,86,.2); background: var(--cairn-pale); }
+
+.pub-title {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.4;
+}
+.pub-title a { text-decoration: none; }
+.pub-title a:hover { color: var(--cairn); }
+
+.pub-doi {
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: var(--cairn);
+  white-space: nowrap;
+}
+.pub-doi a { text-decoration: none; color: inherit; }
+.pub-doi a:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════
+   ROI
+═══════════════════════════════════════ */
+#roi { border-bottom: 1px solid var(--rule); background: var(--paper-2); }
+.roi-inner {
+  padding: clamp(32px, 5vw, 56px) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+@media (max-width: 700px) { .roi-inner { grid-template-columns: 1fr; } }
+
+.roi-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.roi-num {
+  background: var(--paper);
+  padding: 20px 18px;
+  text-align: center;
+}
+.roi-val {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--cairn);
+  display: block;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.roi-lbl {
+  font-family: var(--sans);
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.roi-desc {
+  font-size: .8rem;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+
+.roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.roadmap h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.rm-step {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.rm-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 28px;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+.rm-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: .65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.rm-body h4 {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: .95rem;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.rm-body p {
+  font-size: .9rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════
+   Version
+═══════════════════════════════════════ */
+#version { border-bottom: 1px solid var(--rule); }
+.version-inner {
+  padding: clamp(32px, 5vw, 56px) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+@media (max-width: 700px) { .version-inner { grid-template-columns: 1fr; } }
+
+.version-card {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.version-card-head {
+  background: var(--ink);
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.version-card-head h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--paper);
+  line-height: 1.3;
+}
+.version-badge {
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--r);
+  background: rgba(139,105,20,.25);
+  color: #d4a84b;
+  border: 1px solid rgba(139,105,20,.3);
+  flex-shrink: 0;
+}
+.version-card-body { background: var(--paper); padding: 18px 22px; }
+.version-features {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+.vf {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .92rem;
+  color: var(--ink-2);
+}
+.vf::before {
+  content: '✓';
+  color: var(--cairn);
+  font-size: .8rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.version-limits {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 12px 16px;
+}
+.version-limits .lim-label {
+  font-family: var(--mono);
+  font-size: .65rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.version-limits ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.version-limits li {
+  font-size: .88rem;
+  color: var(--ink-2);
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.5;
+}
+.version-limits li::before {
+  content: '!';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 700;
+  font-family: var(--mono);
+  font-size: .7rem;
+}
+.version-cta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+.tech-table thead tr {
+  border-bottom: 2px solid var(--ink);
+}
+.tech-table th {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: .75rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 8px 0;
+  text-align: left;
+}
+.tech-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-2);
+  color: var(--ink-2);
+  vertical-align: top;
+}
+.tech-table tr:last-child td { border-bottom: none; }
+.tech-table .layer {
+  font-weight: 500;
+  color: var(--ink);
+  font-size: .92rem;
+  padding-right: 16px;
+}
+.tech-table .tech {
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--cairn);
+}
+
+/* ═══════════════════════════════════════
+   Contact
+═══════════════════════════════════════ */
+#contact { background: var(--dark); border-bottom: 1px solid rgba(255,255,255,.06); }
+.contact-inner {
+  padding: clamp(40px, 7vw, 80px) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: start;
+}
+@media (max-width: 700px) { .contact-inner { grid-template-columns: 1fr; } }
+
+.contact-left h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: var(--paper);
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-bottom: 14px;
+}
+.contact-left p {
+  font-size: .92rem;
+  color: rgba(247,245,240,.6);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.contact-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cl {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.cl-key {
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(247,245,240,.35);
+  flex-shrink: 0;
+  width: 60px;
+}
+.cl-val {
+  font-size: .88rem;
+  color: rgba(247,245,240,.7);
+}
+.cl-val a { color: var(--cairn-mid); text-decoration: none; }
+.cl-val a:hover { color: #2dd4bf; }
+
+.contact-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.step-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.step-num {
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: var(--cairn-mid);
+  flex-shrink: 0;
+  padding-top: 2px;
+  letter-spacing: .06em;
+}
+.step-card h4 {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: .95rem;
+  color: rgba(247,245,240,.9);
+  margin-bottom: 3px;
+}
+.step-card p {
+  font-size: .88rem;
+  color: rgba(247,245,240,.45);
+  line-height: 1.5;
+}
+.contact-cta {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-white {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: .82rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: var(--r);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-white:hover { background: #fff; }
+.btn-ghost-white {
+  background: transparent;
+  color: rgba(247,245,240,.6);
+  border: 1px solid rgba(255,255,255,.12);
+  font-family: var(--sans);
+  font-size: .82rem;
+  font-weight: 400;
+  padding: 10px 22px;
+  border-radius: var(--r);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-ghost-white:hover { color: var(--paper); border-color: rgba(255,255,255,.3); }
+
+/* ═══════════════════════════════════════
+   Impressum
+═══════════════════════════════════════ */
+#impressum {
+  background: var(--dark-2);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: clamp(28px, 4vw, 48px) 0;
+}
+#impressum h2 {
+  font-family: var(--mono);
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(247,245,240,.3);
+  margin-bottom: 16px;
+}
+.imp-content {
+  font-size: .88rem;
+  color: rgba(247,245,240,.45);
+  line-height: 1.7;
+  max-width: 560px;
+}
+.imp-content strong { color: rgba(247,245,240,.65); }
+.imp-content a { color: var(--cairn-mid); text-decoration: none; }
+.imp-content a:hover { text-decoration: underline; }
+.imp-content p + p { margin-top: 6px; }
+
+/* ═══════════════════════════════════════
+   Footer
+═══════════════════════════════════════ */
+footer {
+  background: var(--dark);
+  padding: 20px 0;
+}
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--col);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.footer-copy {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: rgba(247,245,240,.28);
+  letter-spacing: .04em;
+}
+.footer-links {
+  display: flex;
+  gap: 18px;
+  list-style: none;
+}
+.footer-links a {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: rgba(247,245,240,.28);
+  text-decoration: none;
+  letter-spacing: .04em;
+  transition: color .18s;
+}
+.footer-links a:hover { color: rgba(247,245,240,.65); }
+
+/* ═══════════════════════════════════════
+   Divider
+═══════════════════════════════════════ */
+.section-divider {
+  height: 1px;
+  background: var(--rule);
+  border: none;
+}
+
+/* ═══════════════════════════════════════
+   Scroll reveal
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.reveal.in { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .18s; }
+.reveal-d3 { transition-delay: .26s; }
+.reveal-d4 { transition-delay: .34s; }
+
+/* ═══════════════════════════════════════
+   Compliance badges
+═══════════════════════════════════════ */
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .06em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--rule);
+  color: var(--ink-3);
+  background: var(--paper);
+}
+.badge.active {
+  color: var(--cairn);
+  border-color: rgba(15,110,86,.25);
+  background: var(--cairn-pale);
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">
+      <em>AION</em> Clinical
+      <span class="nav-sub">· ISCaD GmbH · Wedemark</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#products" class="de">Modelle</a><a href="#products" class="en">Models</a></li>
+      <li><a href="#features" class="de">Features</a><a href="#features" class="en">Features</a></li>
+      <li><a href="#publications" class="de">Publikationen</a><a href="#publications" class="en">Publications</a></li>
+      <li><a href="#version" class="de">Release</a><a href="#version" class="en">Release</a></li>
+      <li><a href="/blog/" class="nav-blog de">Blog</a><a href="/blog/" class="nav-blog en">Blog</a></li>
+      <li><a href="#contact" class="de">Kontakt</a><a href="#contact" class="en">Contact</a></li>
+    </ul>
+    <div class="lang-sw">
+      <button id="btnDE" class="active" onclick="setLang('de')">DE</button>
+      <button id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow de">ISCaD GmbH · FM-1 · FM-2 · FM-3 · FM-4</div>
+        <div class="hero-eyebrow en">ISCaD GmbH · FM-1 · FM-2 · FM-3 · FM-4</div>
+
+        <h1 class="hero-title de">
+          Klinische Daten —<br>
+          mathematisch fundiert,<br>
+          <strong>kausal erklärbar.</strong>
+        </h1>
+        <h1 class="hero-title en">
+          Clinical data —<br>
+          mathematically grounded,<br>
+          <strong>causally explainable.</strong>
+        </h1>
+
+        <p class="hero-desc de">
+          <em>AION</em> und <em>CAIRN</em> bilden ein offenes wissenschaftliches Ökosystem für
+          klinische Informationssysteme — von der algebraischen Theorie bis zur
+          produktionsbereiten Python-Implementierung mit FHIR R4, kausaler Inferenz und
+          erklärbarer KI.
+        </p>
+        <p class="hero-desc en">
+          <em>AION</em> and <em>CAIRN</em> form an open scientific ecosystem for clinical
+          information systems — from algebraic theory to a production-ready Python
+          implementation with FHIR R4, causal inference, and explainable AI.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#products" class="btn btn-ink de">Modelle entdecken</a>
+          <a href="#products" class="btn btn-ink en">Explore models</a>
+          <a href="#publications" class="btn btn-outline de">Publikationen</a>
+          <a href="#publications" class="btn btn-outline en">Publications</a>
+          <a href="#contact" class="btn btn-cairn de">Pilot anfragen</a>
+          <a href="#contact" class="btn btn-cairn en">Request pilot</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-stat reveal">
+          <div class="hero-stat-val">13</div>
+          <div class="hero-stat-label de">Allen-Relationen · vollständig</div>
+          <div class="hero-stat-label en">Allen relations · complete</div>
+        </div>
+        <div class="hero-stat reveal reveal-d1">
+          <div class="hero-stat-val">FHIR R4</div>
+          <div class="hero-stat-label de">Nativ konform · HL7 v2</div>
+          <div class="hero-stat-label en">Natively compliant · HL7 v2</div>
+        </div>
+        <div class="hero-stat reveal reveal-d2">
+          <div class="hero-stat-val">ε-DP</div>
+          <div class="hero-stat-label de">Differential Privacy · föderiert</div>
+          <div class="hero-stat-label en">Differential Privacy · federated</div>
+        </div>
+        <div class="hero-stat reveal reveal-d3">
+          <div class="hero-stat-val">v2.0.4</div>
+          <div class="hero-stat-label de">Aktuelle Version · Mai 2026</div>
+          <div class="hero-stat-label en">Current release · May 2026</div>
+        </div>
+        <div class="hero-stat reveal reveal-d4">
+          <div class="hero-stat-val">AGPL</div>
+          <div class="hero-stat-label de">Open Source · ISCaD GmbH</div>
+          <div class="hero-stat-label en">Open Source · ISCaD GmbH</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRODUCTS ══════════════ -->
+<section id="products">
+  <div class="product-col container" style="max-width:none; padding:0; display:contents">
+    <!-- AION -->
+    <div class="product-col reveal">
+      <div style="max-width:calc(var(--max)/2 - var(--col)); margin-left:auto; padding: clamp(32px,5vw,60px) clamp(20px,4vw,52px);">
+        <div class="product-mark mark-aion"></div>
+        <div class="product-tag aion">FM-3 · Theorie · Modell</div>
+        <h2 class="de" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--ink);margin-bottom:8px;letter-spacing:-.01em">AION</h2>
+        <h2 class="en" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--ink);margin-bottom:8px;letter-spacing:-.01em">AION</h2>
+        <div class="product-full">Algebraic Interval Ontology for Clinical Networks</div>
+        <p class="de">Ein formal-mathematisches Betriebssystem für klinische Daten. AION wandelt rohe, fragmentierte klinische Informationen in eine mathematisch verifizierte, kausal nachvollziehbare Wahrheit um — mit vollständiger temporaler Algebra, erklärbarer KI und DSGVO-konformer Föderierung.</p>
+        <p class="en">A formal-mathematical operating system for clinical data. AION transforms raw, fragmented clinical information into a mathematically verified, causally traceable truth — with complete temporal algebra, explainable AI, and GDPR-compliant federation.</p>
+        <ul class="feature-list aion">
+          <li class="de">DAG-basierte Typhierarchie, formal prüfbar via Z3 SMT-Solver</li>
+          <li class="en">DAG-based type hierarchy, formally verifiable via Z3 SMT-Solver</li>
+          <li class="de">Alle 13 Allen-Relationen plus unscharfe Zeitintervalle (Monte Carlo)</li>
+          <li class="en">All 13 Allen relations plus fuzzy time intervals (Monte Carlo)</li>
+          <li class="de">Kausale Inferenz: do-Operator, Backdoor-Adjustierung, Kontrafaktik</li>
+          <li class="en">Causal inference: do-operator, backdoor adjustment, counterfactuals</li>
+          <li class="de">Erklärbare KI: Shapley-Attribution auf Ereignisebene (EU AI Act)</li>
+          <li class="en">Explainable AI: Shapley attribution at event level (EU AI Act)</li>
+          <li class="de">Föderierte ε-Differential Privacy — DSGVO-konform by design</li>
+          <li class="en">Federated ε-Differential Privacy — GDPR-compliant by design</li>
+          <li class="de">FHIR R4 als Strukturhomomorphismus · Schemaevolution</li>
+          <li class="en">FHIR R4 as structural homomorphism · Schema evolution</li>
+        </ul>
+        <a href="#features" class="btn btn-outline de">Alle Features →</a>
+        <a href="#features" class="btn btn-outline en">All features →</a>
+      </div>
+    </div>
+
+    <!-- CAIRN -->
+    <div class="product-col reveal reveal-d1" style="background:var(--paper-2)">
+      <div style="max-width:calc(var(--max)/2 - var(--col)); padding: clamp(32px,5vw,60px) clamp(20px,4vw,52px);">
+        <div class="product-mark mark-cairn"></div>
+        <div class="product-tag cairn">FM-2 · Python · Implementierung</div>
+        <h2 class="de" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--ink);margin-bottom:8px;letter-spacing:-.01em">CAIRN</h2>
+        <h2 class="en" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--ink);margin-bottom:8px;letter-spacing:-.01em">CAIRN</h2>
+        <div class="product-full de">Clinical Interoperability Reference Architecture</div>
+        <div class="product-full en">Clinical Interoperability Reference Architecture</div>
+        <p class="de" style="margin-top:10px">Python-Referenzimplementierung von FM-2 — die spezifische Implementierung des formalen AION-Modells für die Herzchirurgie und darüber hinaus. Mit bidirektionalem FHIR R4-Mapping, HL7 v2-Adaptern und dem SILD-Detektor für Informationsverluste bei CDR-zu-FHIR-Übertragungen.</p>
+        <p class="en" style="margin-top:10px">Python reference implementation of FM-2 — the specific implementation of the formal AION model for cardiac surgery and beyond. With bidirectional FHIR R4 mapping, HL7 v2 adapters, and the SILD detector for information losses in CDR-to-FHIR transfers.</p>
+
+        <div class="code-block">
+          <pre><span class="k">pip</span> install aion-clinical
+
+<span class="k">from</span> aion_clinical <span class="k">import</span> ClinicalEvent
+
+event = ClinicalEvent(
+    type=<span class="s">"Observation"</span>,
+    temporal_context=<span class="s">"during:HLM"</span>,
+    causal_relation=<span class="s">"lactate-response"</span>
+)</pre>
+        </div>
+
+        <ul class="feature-list cairn">
+          <li class="de">FHIR R4 bidirektionales Mapping als Strukturhomomorphismus</li>
+          <li class="en">FHIR R4 bidirectional mapping as structural homomorphism</li>
+          <li class="de">HL7 v2 Adapter · MLLP-Live-Listener · Synthea-Kohorten</li>
+          <li class="en">HL7 v2 adapter · MLLP live listener · Synthea cohorts</li>
+          <li class="de">SILD-Detektor: Informationsverluste bei CDR→FHIR sichtbar machen</li>
+          <li class="en">SILD detector: making information losses in CDR→FHIR visible</li>
+          <li class="de">Z3 SMT-Solver zur formalen Verifikation der Typhierarchie</li>
+          <li class="en">Z3 SMT-Solver for formal verification of the type hierarchy</li>
+          <li class="de">REST-API (FastAPI) · GraphQL · WebSockets · Kafka-Streaming</li>
+          <li class="en">REST API (FastAPI) · GraphQL · WebSockets · Kafka streaming</li>
+        </ul>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener" class="btn btn-cairn">PyPI →</a>
+          <a href="https://codeberg.org/fm2-project/cairn" target="_blank" rel="noopener" class="btn btn-outline">Codeberg →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FEATURES ══════════════ -->
+<section id="features">
+  <div class="features-header">
+    <div class="container">
+      <div>
+        <div class="section-label de">Kernkonzepte</div>
+        <div class="section-label en">Core concepts</div>
+        <h2 class="section-title de">Mathematik als Sicherheitsnetz</h2>
+        <h2 class="section-title en">Mathematics as a safety net</h2>
+      </div>
+      <p style="font-size:.95rem;color:var(--ink-2);max-width:340px;line-height:1.6" class="de">Fünf Eigenschaften, die AION in dieser Kombination am Markt einzigartig machen.</p>
+      <p style="font-size:.95rem;color:var(--ink-2);max-width:340px;line-height:1.6" class="en">Five properties that make AION uniquely positioned in the market.</p>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-num">01</div>
+      <h3 class="de">Digitaler Zwilling</h3>
+      <h3 class="en">Digital Twin</h3>
+      <p class="de">Alle klinischen Daten — von der Diagnose bis zum Vitalzeichen — auf einer gemeinsamen Zeitachse mit 13 Allen-Relationen. DAG-basierte Typhierarchie, formal prüfbar. Keine manuelle Datenzusammenführung mehr nötig.</p>
+      <p class="en">All clinical data — from diagnosis to vital sign — on a shared timeline with 13 Allen relations. DAG-based type hierarchy, formally verifiable. No more manual data merging required.</p>
+      <div class="feat-benefit de">360°-Patientensicht in Echtzeit</div>
+      <div class="feat-benefit en">360° patient view in real time</div>
+    </div>
+
+    <div class="feat-card reveal reveal-d1">
+      <div class="feat-num">02</div>
+      <h3 class="de">Kausale Simulation</h3>
+      <h3 class="en">Causal Simulation</h3>
+      <p class="de">Simulieren Sie Therapieänderungen am digitalen Zwilling, bevor sie am Patienten angewendet werden. do-Operator nach Pearl, Backdoor-Adjustierung, kontrafaktische Analysen — Kausalität statt reiner Korrelation.</p>
+      <p class="en">Simulate treatment changes on the digital twin before applying them to patients. do-operator by Pearl, backdoor adjustment, counterfactual analyses — causality, not mere correlation.</p>
+      <div class="feat-benefit de">Virtuelle klinische Studien ohne Patientenrisiko</div>
+      <div class="feat-benefit en">Virtual clinical trials without patient risk</div>
+    </div>
+
+    <div class="feat-card reveal reveal-d2">
+      <div class="feat-num">03</div>
+      <h3 class="de">Fuzzy-Zeit-Logik</h3>
+      <h3 class="en">Fuzzy Time Logic</h3>
+      <p class="de">Unsichere Zeitangaben wie „ca. 15 Uhr" werden als stochastische Intervalle korrekt verarbeitet statt verworfen. Probabilistische Allen-Relationen mit konfigurierbaren Konfidenzschwellwerten.</p>
+      <p class="en">Uncertain timestamps such as "approx. 3 pm" are processed correctly as stochastic intervals rather than discarded. Probabilistic Allen relations with configurable confidence thresholds.</p>
+      <div class="feat-benefit de">Bis zu 30 % höhere Datenqualität</div>
+      <div class="feat-benefit en">Up to 30% higher data quality</div>
+    </div>
+
+    <div class="feat-card reveal reveal-d1">
+      <div class="feat-num">04</div>
+      <h3 class="de">Erklärbare KI (XAI)</h3>
+      <h3 class="en">Explainable AI (XAI)</h3>
+      <p class="de">Jede KI-Entscheidung wird lückenlos auf zugrunde liegende klinische Ereignisse zurückgeführt. Shapley-Attribution auf Ereignisebene, kontrafaktische Erklärungen. Vollständig konform mit dem EU AI Act.</p>
+      <p class="en">Every AI decision is fully traced back to underlying clinical events. Shapley attribution at event level, counterfactual explanations. Fully compliant with the EU AI Act.</p>
+      <div class="feat-benefit de">„Risiko hoch wegen Laktat X" — nachvollziehbar</div>
+      <div class="feat-benefit en">"Risk high due to Lactate X" — fully traceable</div>
+    </div>
+
+    <div class="feat-card reveal reveal-d2">
+      <div class="feat-num">05</div>
+      <h3 class="de">Föderierte Privatsphäre</h3>
+      <h3 class="en">Federated Privacy</h3>
+      <p class="de">KI-Modelle mit Partnerkliniken trainieren, ohne dass ein einziger Patientendatensatz die Klinik verlässt. Mathematisch garantierte ε-Differential Privacy. DSGVO-konform by design.</p>
+      <p class="en">Train AI models with partner hospitals without a single patient record leaving your institution. Mathematically guaranteed ε-Differential Privacy. GDPR-compliant by design.</p>
+      <div class="feat-benefit de">Forschungskooperationen ohne Datenweitergabe</div>
+      <div class="feat-benefit en">Research cooperation without data transfer</div>
+    </div>
+
+    <div class="feat-card reveal reveal-d3">
+      <div class="feat-num">06</div>
+      <h3 class="de">FHIR-nativ & skalierbar</h3>
+      <h3 class="en">FHIR-native & scalable</h3>
+      <p class="de">Bidirektionales AION↔FHIR R4 Mapping als Strukturhomomorphismus, HL7 v2, MLLP-Listener. Kafka-Streaming, Dask/Ray für Big Data, Docker/Kubernetes. Kein Vendor-Lock-in.</p>
+      <p class="en">Bidirectional AION↔FHIR R4 mapping as structural homomorphism, HL7 v2, MLLP listener. Kafka streaming, Dask/Ray for Big Data, Docker/Kubernetes. No vendor lock-in.</p>
+      <div class="feat-benefit de">KHZG-tauglich — Interoperabilität erfüllt</div>
+      <div class="feat-benefit en">KHZG-compliant — interoperability fulfilled</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STAKEHOLDERS ══════════════ -->
+<section id="stakeholders">
+  <div class="container">
+    <div class="stakeholders-inner">
+      <div class="stakeholders-left reveal">
+        <div class="section-label de">Zielgruppen</div>
+        <div class="section-label en">Stakeholders</div>
+        <h2 class="section-title de">Für wen ist AION?</h2>
+        <h2 class="section-title en">Who is AION for?</h2>
+        <p style="font-size:.95rem;color:var(--ink-2);line-height:1.65;margin-top:10px" class="de">AION adressiert alle Akteure, die mit klinischen Daten arbeiten — von der Intensivstation bis zur Pharmaindustrie.</p>
+        <p style="font-size:.95rem;color:var(--ink-2);line-height:1.65;margin-top:10px" class="en">AION addresses all stakeholders working with clinical data — from the ICU to the pharmaceutical industry.</p>
+      </div>
+      <div class="stakeholders-right">
+        <div class="stakeholder-cards">
+          <div class="sh-card reveal">
+            <span class="sh-role">CMIO / Ärztliche Leitung</span>
+            <h4 class="de">Klinischer Nutzen</h4>
+            <h4 class="en">Clinical value</h4>
+            <ul>
+              <li class="de">Erklärbare Empfehlungen statt Black-Box-Score</li>
+              <li class="en">Explainable recommendations, not black-box scores</li>
+              <li class="de">Vollständige Zeitsemantik (alle 13 Allen-Relationen)</li>
+              <li class="en">Complete temporal semantics (all 13 Allen relations)</li>
+              <li class="de">Leitlinienvalidierung via formale Mustersprachen</li>
+              <li class="en">Guideline validation via formal pattern languages</li>
+            </ul>
+          </div>
+          <div class="sh-card reveal reveal-d1">
+            <span class="sh-role">CIO / IT-Leitung</span>
+            <h4 class="de">Technische Sicherheit</h4>
+            <h4 class="en">Technical security</h4>
+            <ul>
+              <li class="de">FHIR-nativ, kein Vendor-Lock-in</li>
+              <li class="en">FHIR-native, no vendor lock-in</li>
+              <li class="de">Docker/Kubernetes, Prometheus/Grafana</li>
+              <li class="en">Docker/Kubernetes, Prometheus/Grafana</li>
+              <li class="de">OAuth2/JWT, RBAC, PHI-Verschlüsselung</li>
+              <li class="en">OAuth2/JWT, RBAC, PHI encryption</li>
+            </ul>
+          </div>
+          <div class="sh-card reveal reveal-d2">
+            <span class="sh-role de">Klinische Forschung</span>
+            <span class="sh-role en">Clinical Research</span>
+            <h4 class="de">Methodenstärke</h4>
+            <h4 class="en">Methodological strength</h4>
+            <ul>
+              <li class="de">DoWhy, CausalML, PyMC3 integriert</li>
+              <li class="en">DoWhy, CausalML, PyMC3 integrated</li>
+              <li class="de">MIMIC-III & FHIR-kompatibel</li>
+              <li class="en">MIMIC-III & FHIR-compatible</li>
+              <li class="de">Formale Reproduzierbarkeit</li>
+              <li class="en">Formal reproducibility</li>
+            </ul>
+          </div>
+          <div class="sh-card reveal reveal-d3">
+            <span class="sh-role">Pharma & Regulatorik</span>
+            <h4 class="de">RWE & Compliance</h4>
+            <h4 class="en">RWE & compliance</h4>
+            <ul>
+              <li class="de">Auditierbare Datenherkunft</li>
+              <li class="en">Auditable data provenance</li>
+              <li class="de">GDPR/HIPAA Compliance-Bausteine</li>
+              <li class="en">GDPR/HIPAA compliance building blocks</li>
+              <li class="de">Skalierbar auf multi-site Daten</li>
+              <li class="en">Scalable to multi-site data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PUBLICATIONS ══════════════ -->
+<section id="publications">
+  <div class="pub-header">
+    <div class="container">
+      <div>
+        <div class="section-label de">Wissenschaftliche Veröffentlichungen</div>
+        <div class="section-label en">Scientific publications</div>
+        <h2 class="section-title de">Publikationen</h2>
+        <h2 class="section-title en">Publications</h2>
+      </div>
+      <a href="https://zenodo.org/search?q=iscad+aion" target="_blank" rel="noopener" class="btn btn-outline de">Alle auf Zenodo →</a>
+      <a href="https://zenodo.org/search?q=iscad+aion" target="_blank" rel="noopener" class="btn btn-outline en">All on Zenodo →</a>
+    </div>
+  </div>
+  <div class="container">
+    <ul class="pub-list reveal">
+
+      <!-- FM-1 -->
+      <li class="pub-item">
+        <span class="pub-year">März 2026</span>
+        <span class="pub-chip aion">FM-1</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/19205557" target="_blank" rel="noopener">Grundlagen zur wissenschaftlichen Auswertung von klinischen Informationen (FM-1)</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/19205557" target="_blank" rel="noopener">Foundations for the scientific evaluation of clinical information (FM-1)</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 24. März 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/19205557" target="_blank" rel="noopener">zenodo.org/records/19205557</a></div>
+      </li>
+
+      <!-- FM-2 -->
+      <li class="pub-item">
+        <span class="pub-year">Apr. 2026</span>
+        <span class="pub-chip aion">FM-2</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/19381993" target="_blank" rel="noopener">Erweitertes mathematisches Modell klinischer Informationen (FM-2)</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/19381993" target="_blank" rel="noopener">Extended mathematical model of clinical information (FM-2)</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 2. April 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/19381993" target="_blank" rel="noopener">zenodo.org/records/19381993</a></div>
+      </li>
+
+      <!-- CAIRN -->
+      <li class="pub-item">
+        <span class="pub-year">Apr. 2026</span>
+        <span class="pub-chip cairn">CAIRN</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/19483182" target="_blank" rel="noopener">CAIRN — Clinical Interoperability Reference Architecture. Aufbauend auf FM-2.</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/19483182" target="_blank" rel="noopener">CAIRN — Clinical Interoperability Reference Architecture. Built on FM-2.</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 9. April 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/19483182" target="_blank" rel="noopener">zenodo.org/records/19483182</a></div>
+      </li>
+
+      <!-- AION FM-3 -->
+      <li class="pub-item">
+        <span class="pub-year">Apr. 2026</span>
+        <span class="pub-chip aion">FM-3</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/19553130" target="_blank" rel="noopener">AION — Algebraic Interval Ontology for Clinical Networks (FM-3)</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/19553130" target="_blank" rel="noopener">AION — Algebraic Interval Ontology for Clinical Networks (FM-3)</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 13. April 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/19553130" target="_blank" rel="noopener">zenodo.org/records/19553130</a></div>
+      </li>
+
+      <!-- Skalierungsschicht -->
+      <li class="pub-item">
+        <span class="pub-year">Mai 2026</span>
+        <span class="pub-chip aion">AION</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/20095470" target="_blank" rel="noopener">AION-Skalierungsschicht: Approximative und verteilte Auswertung klinischer Wissensgraphen</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/20095470" target="_blank" rel="noopener">AION scaling layer: Approximate and distributed evaluation of clinical knowledge graphs</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 9. Mai 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/20095470" target="_blank" rel="noopener">zenodo.org/records/20095470</a></div>
+      </li>
+
+      <!-- FM-4 / SILD -->
+      <li class="pub-item">
+        <span class="pub-year">Mai 2026</span>
+        <span class="pub-chip aion">FM-4</span>
+        <div>
+          <div class="pub-title de"><a href="https://zenodo.org/records/20391260" target="_blank" rel="noopener">FM-4: Signal-Loss Inspection at Data-boundaries — Eine formale Detektorklasse für klinische Cross-System-Übertragungen</a></div>
+          <div class="pub-title en"><a href="https://zenodo.org/records/20391260" target="_blank" rel="noopener">FM-4: Signal-Loss Inspection at Data-boundaries — A formal detector class for clinical cross-system transfers</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">Friedhelm Matten · ISCaD GmbH · 26. Mai 2026 · AGPL-3.0 or Commercial</div>
+        </div>
+        <div class="pub-doi"><a href="https://zenodo.org/records/20391260" target="_blank" rel="noopener">zenodo.org/records/20391260</a></div>
+      </li>
+
+      <!-- PyPI 1.0.x -->
+      <li class="pub-item">
+        <span class="pub-year">Apr. 2026</span>
+        <span class="pub-chip cairn">PyPI</span>
+        <div>
+          <div class="pub-title de"><a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener">aion-clinical 1.0.1 – 1.0.6 · Python-Paket auf PyPI</a></div>
+          <div class="pub-title en"><a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener">aion-clinical 1.0.1 – 1.0.6 · Python package on PyPI</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">ISCaD GmbH · 15. April 2026 · EUPL-1.2</div>
+        </div>
+        <div class="pub-doi"><a href="https://pypi.org/project/aion-clinical/1.0.6/" target="_blank" rel="noopener">pypi.org/project/aion-clinical</a></div>
+      </li>
+
+      <!-- PyPI 2.0.x -->
+      <li class="pub-item">
+        <span class="pub-year">Mai 2026</span>
+        <span class="pub-chip cairn">PyPI</span>
+        <div>
+          <div class="pub-title de"><a href="https://pypi.org/project/aion-clinical/2.0.4/" target="_blank" rel="noopener">aion-clinical 2.0.4 · Aktuelle Produktionsversion</a></div>
+          <div class="pub-title en"><a href="https://pypi.org/project/aion-clinical/2.0.4/" target="_blank" rel="noopener">aion-clinical 2.0.4 · Current production release</a></div>
+          <div style="font-size:.78rem;color:var(--ink-3);margin-top:4px;font-family:var(--sans)">ISCaD GmbH · 25. Mai 2026 · AGPL-3.0 or Commercial</div>
+        </div>
+        <div class="pub-doi"><a href="https://pypi.org/project/aion-clinical/2.0.4/" target="_blank" rel="noopener">pypi.org/…/2.0.4</a></div>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ ROI ══════════════ -->
+<section id="roi">
+  <div class="container">
+    <div class="roi-inner">
+      <div class="reveal">
+        <div class="section-label de">Business Case</div>
+        <div class="section-label en">Business case</div>
+        <h2 class="section-title de" style="margin-bottom:24px">Messbarer Mehrwert</h2>
+        <h2 class="section-title en" style="margin-bottom:24px">Measurable value</h2>
+        <div class="roi-numbers">
+          <div class="roi-num">
+            <span class="roi-val">−15 %</span>
+            <div class="roi-lbl de">Komplikationskosten</div>
+            <div class="roi-lbl en">Complication costs</div>
+            <div class="roi-desc de">Durch präzisere Risikovorhersagen und frühzeitige Interventionen</div>
+            <div class="roi-desc en">Through more precise risk predictions and early interventions</div>
+          </div>
+          <div class="roi-num">
+            <span class="roi-val">−30 %</span>
+            <div class="roi-lbl de">Datenbereinigung</div>
+            <div class="roi-lbl en">Data cleaning effort</div>
+            <div class="roi-desc de">Automatisierte Verarbeitung fragmentierter und unsicherer Daten</div>
+            <div class="roi-desc en">Automated processing of fragmented and uncertain data</div>
+          </div>
+          <div class="roi-num">
+            <span class="roi-val">+100 %</span>
+            <div class="roi-lbl de">Forschungskapazität</div>
+            <div class="roi-lbl en">Research capacity</div>
+            <div class="roi-desc de">Durch sichere föderierte Kooperationen ohne Datenweitergabe</div>
+            <div class="roi-desc en">Through secure federated collaboration without data transfer</div>
+          </div>
+          <div class="roi-num">
+            <span class="roi-val" style="font-size:1.1rem">EU AI Act</span>
+            <div class="roi-lbl de">Compliance-Sicherheit</div>
+            <div class="roi-lbl en">Compliance certainty</div>
+            <div class="roi-desc de">Von Haus aus konform mit DSGVO, HIPAA und EU AI Act</div>
+            <div class="roi-desc en">Natively compliant with GDPR, HIPAA, and EU AI Act</div>
+          </div>
+        </div>
+        <div class="badge-row" style="margin-top:20px">
+          <span class="badge active">DSGVO / GDPR</span>
+          <span class="badge active">HIPAA</span>
+          <span class="badge active">HL7 FHIR R4</span>
+          <span class="badge active">EU AI Act</span>
+          <span class="badge active">KHZG</span>
+          <span class="badge active">AGPL-3.0</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d1">
+        <div class="roadmap">
+          <h3 class="de">3-Monats-Pilotprojekt</h3>
+          <h3 class="en">3-month pilot project</h3>
+          <div class="rm-step">
+            <div class="rm-num">01</div>
+            <div class="rm-body">
+              <h4 class="de">Integration</h4>
+              <h4 class="en">Integration</h4>
+              <p class="de">AION-Einbindung in isolierten Datenbereich (z. B. Intensivstation). FHIR/HL7-Anbindung, Auth-Setup, Daten-Onboarding.</p>
+              <p class="en">AION integration into an isolated data area (e.g. ICU). FHIR/HL7 connectivity, auth setup, data onboarding.</p>
+            </div>
+          </div>
+          <div class="rm-step">
+            <div class="rm-num">02</div>
+            <div class="rm-body">
+              <h4 class="de">Simulation & Validierung</h4>
+              <h4 class="en">Simulation & validation</h4>
+              <p class="de">Kausale Simulation und Risikovorhersage an historischen Daten. Erklärbarkeitsdemonstration mit klinischen Experten.</p>
+              <p class="en">Causal simulation and risk prediction on historical data. Explainability demonstration with clinical experts.</p>
+            </div>
+          </div>
+          <div class="rm-step">
+            <div class="rm-num">03</div>
+            <div class="rm-body">
+              <h4 class="de">Go / No-Go</h4>
+              <h4 class="en">Go / No-Go</h4>
+              <p class="de">ROI-Bewertung, Qualitätsindex-Messung und Entscheidung über flächendeckenden Rollout.</p>
+              <p class="en">ROI assessment, quality index measurement and decision on full rollout.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ VERSION ══════════════ -->
+<section id="version">
+  <div class="container">
+    <div class="version-inner">
+      <div class="reveal">
+        <div class="section-label de">Aktuelle Version</div>
+        <div class="section-label en">Current release</div>
+        <h2 class="section-title de" style="margin-bottom:20px">AION Clinical 2.0.4</h2>
+        <h2 class="section-title en" style="margin-bottom:20px">AION Clinical 2.0.4</h2>
+
+        <div class="version-card">
+          <div class="version-card-head">
+            <h3 class="de">Vom Forschungswerkzeug zur klinik-pilotreifen Plattform</h3>
+            <h3 class="en">From research tool to clinic-ready pilot platform</h3>
+            <span class="version-badge">v2.0.4 · 25. Mai 2026</span>
+          </div>
+          <div class="version-card-body">
+            <div class="version-features">
+              <div class="vf de">Pluggables Auth-Backend: none / apikey / ldap / oidc</div>
+              <div class="vf en">Pluggable auth backend: none / apikey / ldap / oidc</div>
+              <div class="vf de">API-Key vollständig getestet — Rollen & Ablaufdatum</div>
+              <div class="vf en">API-Key fully tested — roles & expiry date</div>
+              <div class="vf de">Rollenbasierte Autorisierung in der HL7-v2-Pipeline</div>
+              <div class="vf en">Role-based authorisation in the HL7 v2 pipeline</div>
+              <div class="vf de">Audit-Trail mit authentifiziertem Principal</div>
+              <div class="vf en">Audit trail with authenticated principal</div>
+              <div class="vf"><code style="font-family:var(--mono);font-size:.78rem;color:var(--cairn)">aion auth keygen</code> &amp; <code style="font-family:var(--mono);font-size:.78rem;color:var(--cairn)">aion auth verify</code></div>
+              <div class="vf de">SQLite mit Schema-Migrationen, Storage-Abstraction</div>
+              <div class="vf en">SQLite with schema migrations, storage abstraction</div>
+              <div class="vf de">Dual-Lizenz: AGPL-3.0-only OR Commercial (ISCaD GmbH) — ab v2.0.3</div>
+              <div class="vf en">Dual-license: AGPL-3.0-only OR Commercial (ISCaD GmbH) — since v2.0.3</div>
+            </div>
+            <div class="version-limits">
+              <div class="lim-label de">Ehrliche Grenzen von v2.0.4</div>
+              <div class="lim-label en">Honest limitations of v2.0.4</div>
+              <ul>
+                <li class="de">LDAP/OIDC nur gegen Mock-Server getestet — AD/IDP-Integration erfordert Nacharbeit</li>
+                <li class="en">LDAP/OIDC tested against mock server only — AD/IDP integration requires additional work</li>
+                <li class="de">MLLP im Klartext — mTLS oder VPN für netzgrenzen-überschreitende Szenarien nötig</li>
+                <li class="en">MLLP in plaintext — mTLS or VPN required for cross-network scenarios</li>
+                <li class="de">Pilotbetrieb mit Forschungsdaten möglich — MDR-Zertifizierung für klinische Produktion Pflicht</li>
+                <li class="en">Pilot with research data possible — MDR certification mandatory for clinical production use</li>
+              </ul>
+            </div>
+            <div class="version-cta">
+              <a href="https://doi.org/10.5281/zenodo.19553130" target="_blank" rel="noopener" class="btn btn-cairn de">Zenodo-Release →</a>
+              <a href="https://doi.org/10.5281/zenodo.19553130" target="_blank" rel="noopener" class="btn btn-cairn en">Zenodo release →</a>
+              <a href="https://codeberg.org/fm2-project/aion" target="_blank" rel="noopener" class="btn btn-outline">Codeberg</a>
+              <a href="#contact" class="btn btn-outline de">Pilot anfragen</a>
+              <a href="#contact" class="btn btn-outline en">Request pilot</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-d1">
+        <div class="section-label de">Technische Architektur</div>
+        <div class="section-label en">Technical architecture</div>
+        <h2 class="section-title de" style="margin-bottom:20px;font-size:1.3rem">Offene Architektur</h2>
+        <h2 class="section-title en" style="margin-bottom:20px;font-size:1.3rem">Open architecture</h2>
+        <div style="overflow-x:auto">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th class="de">Schicht</th>
+                <th class="en">Layer</th>
+                <th class="de">Technologie</th>
+                <th class="en">Technology</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="layer de">Streaming</td><td class="layer en">Streaming</td><td class="tech">Kafka, AsyncIO</td></tr>
+              <tr><td class="layer de">API</td><td class="layer en">API</td><td class="tech">FastAPI, GraphQL, WebSockets</td></tr>
+              <tr><td class="layer de">Skalierung</td><td class="layer en">Scaling</td><td class="tech">Dask, Ray</td></tr>
+              <tr><td class="layer de">Kausalmodell</td><td class="layer en">Causal model</td><td class="tech">DoWhy, CausalML, PyMC3</td></tr>
+              <tr><td class="layer de">Verifikation</td><td class="layer en">Verification</td><td class="tech">Z3 SMT-Solver</td></tr>
+              <tr><td class="layer de">Persistenz</td><td class="layer en">Persistence</td><td class="tech">SQLite → PostgreSQL</td></tr>
+              <tr><td class="layer de">Deployment</td><td class="layer en">Deployment</td><td class="tech">Docker, Kubernetes, GitHub Actions</td></tr>
+              <tr><td class="layer de">Monitoring</td><td class="layer en">Monitoring</td><td class="tech">Prometheus, Grafana</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="reveal">
+        <h2 class="de">Bereit für AION und CAIRN?</h2>
+        <h2 class="en">Ready for AION and CAIRN?</h2>
+        <p class="de">Ob Pilotprojekt, technische Integration oder Lizenzierung — sprechen Sie uns an. Wir melden uns innerhalb von 48 Stunden.</p>
+        <p class="en">Whether pilot project, technical integration, or licensing — get in touch. We respond within 48 hours.</p>
+        <div class="contact-lines">
+          <div class="cl"><span class="cl-key de">Adresse</span><span class="cl-key en">Address</span><span class="cl-val de">ISCaD GmbH · 30900 Wedemark · Deutschland</span><span class="cl-val en">ISCaD GmbH · 30900 Wedemark · Germany</span></div>
+          <div class="cl"><span class="cl-key">E-Mail</span><span class="cl-val"><a href="mailto:info@iscad-it.de">info@iscad-it.de</a></span></div>
+          <div class="cl"><span class="cl-key de">Lizenz</span><span class="cl-key en">Licensing</span><span class="cl-val"><a href="mailto:licensing@iscad-it.de">licensing@iscad-it.de</a></span></div>
+          <div class="cl"><span class="cl-key de">Telefon</span><span class="cl-key en">Phone</span><span class="cl-val"><a href="tel:+4951309741840">+49 5130 9741840</a></span></div>
+          <div class="cl"><span class="cl-key">Code</span><span class="cl-val"><a href="https://codeberg.org/fm2-project/cairn" target="_blank" rel="noopener">codeberg.org/fm2-project/cairn</a></span></div>
+          <div class="cl"><span class="cl-key">PyPI</span><span class="cl-val"><a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener">pypi.org/project/aion-clinical</a></span></div>
+        </div>
+      </div>
+      <div class="reveal reveal-d1">
+        <div class="contact-right">
+          <div class="step-card">
+            <span class="step-num">01</span>
+            <div>
+              <h4 class="de">Discovery-Workshop (½ Tag)</h4>
+              <h4 class="en">Discovery workshop (half day)</h4>
+              <p class="de">Use-Case-Identifikation und Architektur-Skizze für Ihre Infrastruktur.</p>
+              <p class="en">Use case identification and architecture sketch for your infrastructure.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">02</span>
+            <div>
+              <h4 class="de">Proof of Concept (4–6 Wochen)</h4>
+              <h4 class="en">Proof of Concept (4–6 weeks)</h4>
+              <p class="de">Konkreter Anwendungsfall auf realen Daten, Ende-zu-Ende demonstriert.</p>
+              <p class="en">Specific use case on real data, demonstrated end-to-end.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">03</span>
+            <div>
+              <h4 class="de">Pilotinstallation (3–4 Monate)</h4>
+              <h4 class="en">Pilot installation (3–4 months)</h4>
+              <p class="de">Produktive Umgebung mit FHIR-Anbindung und ersten Live-Anwendern.</p>
+              <p class="en">Production environment with FHIR connectivity and first live users.</p>
+            </div>
+          </div>
+          <div class="contact-cta">
+            <a href="mailto:info@iscad-it.de" class="btn-white de">Kontakt aufnehmen</a>
+            <a href="mailto:info@iscad-it.de" class="btn-white en">Get in touch</a>
+            <a href="mailto:licensing@iscad-it.de" class="btn-ghost-white">licensing@iscad-it.de</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ IMPRESSUM ══════════════ -->
+<section id="impressum">
+  <div class="container">
+    <h2 class="de">Impressum</h2>
+    <h2 class="en">Legal Notice</h2>
+    <div class="imp-content de">
+      <p><strong>Angaben gemäß § 5 TMG</strong></p>
+      <p><strong>ISCaD GmbH</strong> · 30900 Wedemark · Deutschland</p>
+      <p><strong>Kontakt:</strong> +49 5130 9741840 · <a href="mailto:info@iscad-it.de">info@iscad-it.de</a></p>
+      <p><strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong> Friedhelm Matten, ISCaD GmbH, 30900 Wedemark</p>
+      <p style="margin-top:10px">AION-Software steht unter der AGPL-3.0-Lizenz (Open Source) oder einer kommerziellen Lizenz (ISCaD GmbH). Kommerzielle Lizenzierung auf Anfrage: <a href="mailto:licensing@iscad-it.de">licensing@iscad-it.de</a></p>
+    </div>
+    <div class="imp-content en">
+      <p><strong>Information pursuant to § 5 TMG (German Telemedia Act)</strong></p>
+      <p><strong>ISCaD GmbH</strong> · 30900 Wedemark · Germany</p>
+      <p><strong>Contact:</strong> +49 5130 9741840 · <a href="mailto:info@iscad-it.de">info@iscad-it.de</a></p>
+      <p><strong>Responsible for content pursuant to § 55 para. 2 RStV:</strong> Friedhelm Matten, ISCaD GmbH, 30900 Wedemark</p>
+      <p style="margin-top:10px">AION software is licensed under AGPL-3.0 (open source) or a commercial license (ISCaD GmbH). Commercial licensing on request: <a href="mailto:licensing@iscad-it.de">licensing@iscad-it.de</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">© 2026 ISCaD GmbH · Friedhelm Matten · Wedemark · AGPL-3.0</span>
+    <ul class="footer-links">
+      <li><a href="mailto:info@iscad-it.de">info@iscad-it.de</a></li>
+      <li><a href="https://codeberg.org/fm2-project/cairn" target="_blank" rel="noopener">Codeberg</a></li>
+      <li><a href="https://doi.org/10.5281/zenodo.19548857" target="_blank" rel="noopener">Zenodo</a></li>
+      <li><a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener">PyPI</a></li>
+      <li><a href="impressum.html" class="de">Impressum</a><a href="#impressum" class="en">Legal</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+/* ── Language ── */
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  document.getElementById('btnDE').classList.toggle('active', lang === 'de');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+  const t = lang === 'de'
+    ? 'AION Clinical · ISCaD GmbH — Formale Grundlagen für klinische Daten'
+    : 'AION Clinical · ISCaD GmbH — Formal foundations for clinical data';
+  document.title = t;
+}
+
+/* ── Mobile nav ── */
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── Auto-detect browser language ── */
+(function () {
+  const l = (navigator.language || 'de').slice(0, 2);
+  if (l === 'en') setLang('en');
+})();
+</script>
+
+</body>
+</html>
