@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>AION Clinical Blog</title>
+  <link>https://aion-clinical.eu/blog/</link>
+  <description>Release-Notes, Wissenschaft, Klinik-Praxis und Tutorials zu AION und CAIRN</description>
+  <language>de</language>
+  <atom:link href="https://aion-clinical.eu/blog/feed.xml" rel="self" type="application/rss+xml"/>
+  <lastBuildDate>Tue, 26 May 2026 00:00:00 +0000</lastBuildDate>
+  <item>
+    <title><![CDATA[FM-4 & aion-clinical 2.0.4 — AGPL-3.0 Dual-Lizenz]]></title>
+    <link>https://aion-clinical.eu/blog/aion-fm4-release-2-0-4/</link>
+    <description><![CDATA[FM-4 (Signal-Loss Inspection at Data-boundaries) formalisiert Informationsverluste bei klinischen Cross-System-Übertragungen als Detektorklasse. aion-clinical 2.0.4 wechselt auf AGPL-3.0-only OR Commercial (Dual-Lizenz).]]></description>
+    <pubDate>Tue, 26 May 2026 00:00:00 +0000</pubDate>
+    <guid>https://aion-clinical.eu/blog/aion-fm4-release-2-0-4/</guid>
+    <category>release</category>
+  </item>
+  <item>
+    <title><![CDATA[demo.aion-clinical.de — Die AION-Plattform zum Ausprobieren]]></title>
+    <link>https://aion-clinical.eu/blog/aion-demo-plattform/</link>
+    <description><![CDATA[Vier interaktive Demonstrationen zeigen, was AION in der klinischen Praxis leistet: Sepsis-Früherkennung auf der Intensivstation, kausale Analyse eines postoperativen Verlaufs, föderierte Multicenter-Auswertung mit Differential Privacy — und ein DAG-Editor für klinische Workflows.]]></description>
+    <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
+    <guid>https://aion-clinical.eu/blog/aion-demo-plattform/</guid>
+    <category>clinical</category>
+  </item>
+  <item>
+    <title><![CDATA[aion-clinical 2.0.1 — Release Notes]]></title>
+    <link>https://aion-clinical.eu/blog/aion-clinical-2-0-1-release/</link>
+    <description><![CDATA[Version 2.0.1 des Python-Pakets aion-clinical ist auf PyPI verfügbar. Diese Version bringt eine vollständige Überarbeitung der Authentifizierungsschicht, verbessertes FHIR-Mapping und den neuen kausalen Query-Executor.]]></description>
+    <pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate>
+    <guid>https://aion-clinical.eu/blog/aion-clinical-2-0-1-release/</guid>
+    <category>release</category>
+  </item>
+  <item>
+    <title><![CDATA[AION-Skalierungsschicht: Wenn formale Abfragen auf Millionen Ereignisse treffen]]></title>
+    <link>https://aion-clinical.eu/blog/aion-skalierungsschicht/</link>
+    <description><![CDATA[Das Begleitpapier zur AION-Skalierungsschicht beschreibt, wie die formale AION-Abfragesprache auch auf großen klinischen Datensätzen praktikabel bleibt — durch approximative Algorithmen mit beweisbaren Genauigkeitsschranken.]]></description>
+    <pubDate>Sat, 09 May 2026 00:00:00 +0000</pubDate>
+    <guid>https://aion-clinical.eu/blog/aion-skalierungsschicht/</guid>
+    <category>science</category>
+  </item>
+  <item>
+    <title><![CDATA[CAIRN & FHIR R4: Von der Observation zum AION-Ereignis in 10 Minuten]]></title>
+    <link>https://aion-clinical.eu/blog/cairn-fhir-r4-tutorial/</link>
+    <description><![CDATA[Schritt-für-Schritt-Tutorial: Wie Sie FHIR R4 Observations in das formale AION-Ereignismodell überführen, temporale Abfragen ausführen und Ergebnisse zurück nach FHIR exportieren.]]></description>
+    <pubDate>Mon, 20 Apr 2026 00:00:00 +0000</pubDate>
+    <guid>https://aion-clinical.eu/blog/cairn-fhir-r4-tutorial/</guid>
+    <category>tutorial</category>
+  </item>
+</channel>
+</rss>

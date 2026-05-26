@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="de" data-lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aion-clinical 2.0.1 — Release Notes · AION Clinical Blog</title>
+<meta name="description" content="Version 2.0.1 des Python-Pakets aion-clinical ist auf PyPI verfügbar. Diese Version bringt eine vollständige Überarbeitung der Authentifizierungsschicht, verbessertes FHIR-Mapping und den neuen kausalen Query-Executor.">
+<link rel="canonical" href="https://aion-clinical.eu/blog/aion-clinical-2-0-1-release/">
+<link rel="alternate" type="application/rss+xml" title="AION Clinical Blog" href="https://aion-clinical.eu/blog/feed.xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Syntax Highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme">
+
+<style>
+:root {
+  --ink:        #0E1A12;
+  --ink-2:      #3D5045;
+  --ink-3:      #6A7D6E;
+  --ink-4:      #9AAD9D;
+  --paper:      #F7F5F0;
+  --paper-2:    #EEEAE2;
+  --rule:       #D0CBC0;
+  --rule-dim:   rgba(14,26,18,.06);
+  --cairn:      #0F6E56;
+  --cairn-pale: #E6F4EF;
+  --aion:       #0B3C5D;
+  --aion-pale:  #EAF2FA;
+  --gold:       #8B6914;
+  --gold-pale:  #F5EDD5;
+  --purple:     #5B3D8F;
+  --purple-pale:#F0EAF8;
+  --dark:       #0E1A12;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans:  'DM Sans', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+  --max:   1140px;
+  --col:   clamp(20px, 4vw, 52px);
+  --r:     4px;
+  --r-lg:  8px;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { font-size:18px; scroll-behavior:smooth }
+body { background:var(--paper); color:var(--ink); font-family:var(--sans); font-weight:300; line-height:1.75; -webkit-font-smoothing:antialiased }
+a { color:var(--cairn); text-decoration:none }
+a:hover { text-decoration:underline }
+
+[data-lang="de"] .en,
+[data-lang="en"] .de { display:none }
+
+/* ── Nav ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  background:rgba(247,245,240,.94); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.nav-inner {
+  max-width:var(--max); margin:0 auto; padding:0 var(--col);
+  height:58px; display:flex; align-items:center; gap:20px;
+}
+.nav-logo { font-family:var(--serif); font-size:1.1rem; color:var(--ink); text-decoration:none; margin-right:auto }
+.nav-logo em { font-style:italic; color:var(--cairn) }
+.nav-links { display:flex; gap:2px; list-style:none }
+.nav-links a {
+  font-family:var(--sans); font-size:.85rem; color:var(--ink-3);
+  text-decoration:none; padding:4px 10px; border-radius:var(--r); transition:all .18s
+}
+.nav-links a:hover { color:var(--ink); background:var(--paper-2) }
+.nav-links a.active { color:var(--ink); font-weight:500 }
+.lang-sw { display:flex; border:1px solid var(--rule); border-radius:var(--r); overflow:hidden; flex-shrink:0 }
+.lang-sw button {
+  background:none; border:none; font-family:var(--sans); font-size:.72rem; font-weight:500;
+  letter-spacing:.06em; color:var(--ink-3); cursor:pointer; padding:5px 10px; transition:all .18s
+}
+.lang-sw button.active { background:var(--ink); color:var(--paper) }
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  padding-top:58px; border-bottom:1px solid var(--rule);
+  background:var(--paper-2);
+}
+.breadcrumb-inner {
+  max-width:var(--max); margin:0 auto; padding:10px var(--col);
+  display:flex; align-items:center; gap:6px;
+  font-family:var(--mono); font-size:.65rem; color:var(--ink-3);
+  letter-spacing:.05em;
+}
+.breadcrumb a { color:var(--ink-3); text-decoration:none }
+.breadcrumb a:hover { color:var(--cairn) }
+.breadcrumb .sep { color:var(--ink-4) }
+.breadcrumb .current { color:var(--ink-2) }
+
+/* ── Post header ── */
+.post-header {
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(28px,5vw,56px) var(--col) clamp(20px,3vw,36px);
+  border-bottom:1px solid var(--rule);
+}
+.post-header-meta {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.cat-pill {
+  display:inline-block; font-family:var(--mono); font-size:.62rem;
+  letter-spacing:.1em; text-transform:uppercase; padding:3px 10px;
+  border-radius:var(--r); border:1px solid;
+}
+.cat-release  { color:var(--gold);   border-color:rgba(139,105,20,.25); background:var(--gold-pale) }
+.cat-science  { color:var(--aion);   border-color:rgba(11,60,93,.2);    background:var(--aion-pale) }
+.cat-clinical { color:var(--cairn);  border-color:rgba(15,110,86,.2);   background:var(--cairn-pale) }
+.cat-tutorial { color:var(--purple); border-color:rgba(91,61,143,.2);   background:var(--purple-pale) }
+
+.post-date-meta {
+  font-family:var(--mono); font-size:.68rem; color:var(--ink-4); letter-spacing:.05em;
+}
+.lang-badge {
+  font-family:var(--mono); font-size:.6rem; padding:2px 7px;
+  border:1px solid var(--rule); border-radius:var(--r); color:var(--ink-4);
+}
+h1.post-title {
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  font-size:clamp(1.8rem,4vw,2.8rem); color:var(--ink);
+  line-height:1.15; letter-spacing:-.02em; margin-bottom:14px;
+}
+.post-excerpt-header {
+  font-size:1.05rem; color:var(--ink-2); line-height:1.65;
+  max-width:640px; margin-bottom:16px;
+}
+.post-author-line {
+  font-family:var(--mono); font-size:.68rem; color:var(--ink-3);
+  letter-spacing:.06em;
+}
+.post-author-line strong { color:var(--ink-2) }
+
+/* ── Layout: content + sidebar ── */
+.post-layout {
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(28px,5vw,56px) var(--col);
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:clamp(32px,5vw,64px);
+  align-items:start;
+}
+@media (max-width:860px) { .post-layout { grid-template-columns:1fr } }
+
+/* ── Post body ── */
+.post-body { min-width:0 }
+
+/* Prose styling */
+.post-body h2 {
+  font-family:var(--serif); font-weight:500; font-size:1.45rem;
+  color:var(--ink); margin:2em 0 .6em; line-height:1.25; letter-spacing:-.01em;
+  padding-bottom:.4em; border-bottom:1px solid var(--rule);
+}
+.post-body h3 {
+  font-family:var(--sans); font-weight:500; font-size:1.05rem;
+  color:var(--ink); margin:1.6em 0 .4em; line-height:1.3;
+}
+.post-body h4 {
+  font-family:var(--mono); font-size:.85rem; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3); margin:1.4em 0 .3em;
+}
+.post-body p { font-size:.98rem; color:var(--ink-2); line-height:1.78; margin-bottom:1em }
+.post-body p strong { color:var(--ink); font-weight:500 }
+.post-body p em { font-style:italic; color:var(--ink) }
+.post-body a { color:var(--cairn) }
+
+.post-body ul, .post-body ol {
+  margin:0 0 1em 0; padding-left:0; list-style:none;
+}
+.post-body li {
+  font-size:.98rem; color:var(--ink-2); line-height:1.65;
+  margin-bottom:.35em; padding-left:18px; position:relative;
+}
+.post-body ul li::before {
+  content:'—'; position:absolute; left:0; color:var(--ink-4); font-weight:300;
+}
+.post-body ol { counter-reset:ol-counter }
+.post-body ol li::before {
+  counter-increment:ol-counter;
+  content:counter(ol-counter)'.'; position:absolute; left:0;
+  font-family:var(--mono); font-size:.72rem; color:var(--cairn); padding-top:2px;
+}
+
+/* Code */
+.post-body code {
+  font-family:var(--mono); font-size:.82em; background:var(--paper-2);
+  border:1px solid var(--rule); border-radius:var(--r); padding:1px 5px;
+  color:var(--cairn);
+}
+.post-body pre {
+  background:var(--dark); border-radius:var(--r-lg); padding:18px 20px;
+  margin:1.2em 0; overflow-x:auto; position:relative;
+}
+.post-body pre code {
+  background:none; border:none; padding:0; color:rgba(247,245,240,.85);
+  font-size:.82rem; line-height:1.6;
+}
+.post-body pre .copy-btn {
+  position:absolute; top:10px; right:12px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r); padding:3px 8px; font-family:var(--mono); font-size:.6rem;
+  color:rgba(255,255,255,.4); cursor:pointer; transition:all .2s; letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.post-body pre .copy-btn:hover { background:rgba(255,255,255,.15); color:rgba(255,255,255,.8) }
+.post-body pre .copy-btn.copied { color:#4ade80 }
+
+/* Tables */
+.post-body table {
+  width:100%; border-collapse:collapse; margin:1.2em 0; font-size:.88rem;
+}
+.post-body th {
+  font-family:var(--sans); font-weight:500; font-size:.78rem; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--ink-3); padding:8px 12px; text-align:left;
+  border-bottom:2px solid var(--ink);
+}
+.post-body td { padding:9px 12px; border-bottom:1px solid var(--rule-dim); color:var(--ink-2) }
+.post-body tr:hover td { background:var(--paper-2) }
+
+/* Blockquotes */
+.post-body blockquote {
+  border-left:3px solid var(--cairn); padding:12px 20px;
+  margin:1.2em 0; background:var(--cairn-pale); border-radius:0 var(--r-lg) var(--r-lg) 0;
+}
+.post-body blockquote p { color:var(--ink-2); font-style:italic; margin-bottom:0 }
+
+/* Admonitions */
+.post-body .admonition {
+  border-radius:var(--r-lg); padding:14px 18px; margin:1.2em 0;
+  border-left:3px solid var(--rule);
+}
+.post-body .admonition.note    { background:var(--aion-pale);   border-left-color:var(--aion) }
+.post-body .admonition.warning { background:var(--gold-pale);   border-left-color:var(--gold) }
+.post-body .admonition.tip     { background:var(--cairn-pale);  border-left-color:var(--cairn) }
+.post-body .admonition-title {
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:6px;
+}
+
+/* Heading anchors */
+.post-body .headerlink { opacity:0; margin-left:6px; font-size:.7em; color:var(--ink-4) }
+.post-body h2:hover .headerlink,
+.post-body h3:hover .headerlink { opacity:1 }
+
+/* Tags */
+.post-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:2em; padding-top:1.2em; border-top:1px solid var(--rule) }
+.post-tag {
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.06em;
+  padding:3px 9px; border:1px solid var(--rule); border-radius:100px;
+  color:var(--ink-3); text-decoration:none; transition:all .18s;
+}
+.post-tag:hover { color:var(--cairn); border-color:rgba(15,110,86,.3); text-decoration:none }
+
+/* Back button */
+.back-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--sans); font-size:.85rem; color:var(--ink-3);
+  margin-top:2em; padding:8px 14px; border:1px solid var(--rule);
+  border-radius:var(--r); transition:all .18s;
+}
+.back-link:hover { color:var(--ink); border-color:var(--ink-3); text-decoration:none }
+
+/* ── Sidebar ── */
+.post-sidebar { display:flex; flex-direction:column; gap:20px }
+
+.sidebar-block {
+  background:var(--paper-2); border:1px solid var(--rule);
+  border-radius:var(--r-lg); padding:18px 20px;
+}
+.sidebar-label {
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:12px; display:block;
+}
+
+/* TOC */
+.toc { background:var(--paper-2) }
+.toc .toctitle { display:none }
+.toc ul { list-style:none; padding:0; margin:0 }
+.toc ul ul { padding-left:12px; margin-top:2px }
+.toc li { margin-bottom:3px }
+.toc a {
+  font-family:var(--sans); font-size:.82rem; color:var(--ink-2);
+  text-decoration:none; transition:color .15s; line-height:1.4; display:block;
+}
+.toc a:hover { color:var(--cairn) }
+.toc a.active { color:var(--cairn); font-weight:500 }
+
+/* Sidebar meta */
+.meta-row { display:flex; gap:10px; margin-bottom:8px; font-size:.85rem }
+.meta-key { font-family:var(--mono); font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-4); min-width:64px; padding-top:2px }
+.meta-val { color:var(--ink-2) }
+
+/* ── Footer ── */
+footer { background:var(--dark); padding:20px 0; margin-top:clamp(40px,6vw,80px) }
+.footer-inner {
+  max-width:var(--max); margin:0 auto; padding:0 var(--col);
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+}
+.footer-copy { font-family:var(--mono); font-size:.62rem; color:rgba(247,245,240,.28); letter-spacing:.04em }
+.footer-links { display:flex; gap:16px; list-style:none }
+.footer-links a { font-family:var(--mono); font-size:.62rem; color:rgba(247,245,240,.28); text-decoration:none; letter-spacing:.04em; transition:color .18s }
+.footer-links a:hover { color:rgba(247,245,240,.65) }
+</style>
+</head>
+
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><em>AION</em> Clinical · ISCaD GmbH</a>
+    <ul class="nav-links">
+      <li><a href="/#products" class="de">Modelle</a><a href="/#products" class="en">Models</a></li>
+      <li><a href="/#publications" class="de">Publikationen</a><a href="/#publications" class="en">Publications</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+      <li><a href="/#contact" class="de">Kontakt</a><a href="/#contact" class="en">Contact</a></li>
+    </ul>
+    <div class="lang-sw">
+      <button id="btnDE" onclick="setLang('de')">DE</button>
+      <button id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">AION Clinical</a>
+    <span class="sep">/</span>
+    <a href="/blog/">Blog</a>
+    <span class="sep">/</span>
+    <span class="current">aion-clinical 2.0.1 — Release Notes</span>
+  </div>
+</div>
+
+<!-- Post Header -->
+<div class="post-header">
+  <div class="post-header-meta">
+    <span class="cat-pill cat-release">
+      <span class="de">Release</span>
+      <span class="en">Release</span>
+    </span>
+    <time class="post-date-meta" datetime="2026-05-12">
+      <span class="de">12. Mai 2026</span>
+      <span class="en">May 12, 2026</span>
+    </time>
+    <span class="lang-badge">DE</span>
+  </div>
+  <h1 class="post-title">aion-clinical 2.0.1 — Release Notes</h1>
+  <p class="post-excerpt-header">Version 2.0.1 des Python-Pakets aion-clinical ist auf PyPI verfügbar. Diese Version bringt eine vollständige Überarbeitung der Authentifizierungsschicht, verbessertes FHIR-Mapping und den neuen kausalen Query-Executor.</p>
+  <div class="post-author-line">
+    <span class="de">von</span><span class="en">by</span>
+    <strong>Friedhelm Matten</strong> · ISCaD GmbH
+  </div>
+</div>
+
+<!-- Post Layout -->
+<div class="post-layout">
+
+  <!-- Main Content -->
+  <div class="post-body">
+    <h2 id="uberblick">Überblick<a class="headerlink" href="#uberblick" title="Permanent link">&para;</a></h2>
+<p>Mit <code>aion-clinical 2.0.1</code> veröffentlichen wir das erste stabile Release der 2.x-Serie. Diese Version markiert den Übergang von der Pilot-Plattform zur produktionsbereiten klinischen Infrastruktur.</p>
+<p>Das Paket ist ab sofort auf PyPI verfügbar:</p>
+<pre><code class="language-bash">pip install aion-clinical==2.0.1
+</code></pre>
+<p>oder über Codeberg:</p>
+<pre><code class="language-bash">pip install git+https://codeberg.org/fm2-project/cairn.git@v2.0.1
+</code></pre>
+<hr />
+<h2 id="neuerungen-in-201">Neuerungen in 2.0.1<a class="headerlink" href="#neuerungen-in-201" title="Permanent link">&para;</a></h2>
+<h3 id="uberarbeitete-authentifizierungsschicht">Überarbeitete Authentifizierungsschicht<a class="headerlink" href="#uberarbeitete-authentifizierungsschicht" title="Permanent link">&para;</a></h3>
+<p>Das pluggable Auth-Backend wurde vollständig neu geschrieben. Unterstützte Backends:</p>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Status</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td>✓ Stabil</td>
+<td>Kein Auth — nur für lokale Entwicklung</td>
+</tr>
+<tr>
+<td><code>apikey</code></td>
+<td>✓ Stabil</td>
+<td>API-Keys mit Rollen und Ablaufdatum</td>
+</tr>
+<tr>
+<td><code>ldap</code></td>
+<td>✓ Stabil</td>
+<td>LDAP/Active Directory — gegen echte AD-Instanzen getestet</td>
+</tr>
+<tr>
+<td><code>oidc</code></td>
+<td>✓ Stabil</td>
+<td>OpenID Connect — gegen Keycloak und Azure AD getestet</td>
+</tr>
+</tbody>
+</table>
+<p>Konfiguration via YAML:</p>
+<pre><code class="language-yaml">auth:
+  backend: ldap
+  ldap:
+    server: ldaps://ad.klinik-example.de
+    base_dn: DC=klinik,DC=example,DC=de
+    bind_dn: CN=aion-service,OU=Service,DC=klinik,DC=example,DC=de
+    bind_password: ${LDAP_BIND_PASSWORD}
+    user_filter: &quot;(sAMAccountName={username})&quot;
+    role_attribute: memberOf
+</code></pre>
+<h3 id="verbessertes-fhir-r4-mapping">Verbessertes FHIR R4 Mapping<a class="headerlink" href="#verbessertes-fhir-r4-mapping" title="Permanent link">&para;</a></h3>
+<p>Das bidirektionale AION↔FHIR R4 Mapping wurde in zwei Bereichen erweitert:</p>
+<ul>
+<li><strong>Encounter.location</strong> wird jetzt korrekt auf die AION-Einheitszuordnung (<code>unit</code>) abgebildet</li>
+<li><strong>MedicationAdministration</strong> unterstützt jetzt das vollständige AION-Ereignismodell inkl. <code>causal_relation</code>-Feld</li>
+</ul>
+<pre><code class="language-python">from aion_clinical import FHIRMapper
+
+mapper = FHIRMapper(version=&quot;R4&quot;)
+aion_event = mapper.from_fhir(fhir_observation)
+fhir_bundle = mapper.to_fhir(aion_cohort)
+</code></pre>
+<h3 id="kausaler-query-executor">Kausaler Query-Executor<a class="headerlink" href="#kausaler-query-executor" title="Permanent link">&para;</a></h3>
+<p>Der neue <code>CausalQueryExecutor</code> ermöglicht die direkte Ausführung von do-Operator-Abfragen auf dem klinischen Datenmodell:</p>
+<pre><code class="language-python">from aion_clinical import ClinicalDataStore, CausalQueryExecutor
+
+store = ClinicalDataStore.from_fhir_bundle(&quot;icu_cohort.json&quot;)
+executor = CausalQueryExecutor(store, causal_graph=&quot;icu_graph.yaml&quot;)
+
+# do-Operator: Was wäre der Laktatspiegel, wenn Antibiotikum 2h früher?
+result = executor.do(
+    intervention={&quot;type&quot;: &quot;medication&quot;, &quot;substance&quot;: &quot;Cefuroxim&quot;, &quot;delta_t&quot;: -7200},
+    outcome=&quot;lactate&quot;,
+    cohort_filter={&quot;unit&quot;: &quot;ICU&quot;, &quot;stay_days_min&quot;: 3}
+)
+print(result.summary())
+</code></pre>
+<hr />
+<h2 id="behobene-fehler">Behobene Fehler<a class="headerlink" href="#behobene-fehler" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>#247</strong> — <code>TemporalAlgebra.allen_relation()</code> lieferte falsches Ergebnis für <code>finishes</code> bei Punktereignissen (tB == tE)</li>
+<li><strong>#251</strong> — MLLP-Listener verlor Verbindung nach 300s Inaktivität (Keepalive-Timer ergänzt)</li>
+<li><strong>#258</strong> — <code>FuzzyInterval</code> mit ε=0 verhielt sich nicht identisch zum exakten Intervall</li>
+<li><strong>#263</strong> — SQLite-Migration schlug fehl bei Schemas mit benutzerdefinierten Ereignistypen</li>
+</ul>
+<hr />
+<h2 id="breaking-changes">Breaking Changes<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Breaking Change: Auth-Konfiguration</p>
+<p>Das Format der Auth-Konfiguration in <code>aion.yaml</code> hat sich geändert. Das alte Format <code>auth_backend: apikey</code> muss auf <code>auth.backend: apikey</code> umgestellt werden. Ein Migrationsskript ist verfügbar:</p>
+<p><code>bash
+python -m aion_clinical.migrate --config aion.yaml</code></p>
+</div>
+<hr />
+<h2 id="migration-von-110x">Migration von 1.10.x<a class="headerlink" href="#migration-von-110x" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash"># 1. Paket aktualisieren
+pip install --upgrade aion-clinical==2.0.1
+
+# 2. Konfiguration migrieren
+python -m aion_clinical.migrate --config aion.yaml
+
+# 3. Datenbank-Migrationen ausführen
+aion db migrate
+
+# 4. Auth-Layer testen
+aion auth verify --backend ldap
+</code></pre>
+<hr />
+<h2 id="verfugbarkeit">Verfügbarkeit<a class="headerlink" href="#verfugbarkeit" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>PyPI:</strong> <a href="https://pypi.org/project/aion-clinical/2.0.1/">pypi.org/project/aion-clinical/2.0.1</a></li>
+<li><strong>Codeberg:</strong> <a href="https://codeberg.org/fm2-project/cairn">codeberg.org/fm2-project/cairn</a></li>
+<li><strong>Zenodo:</strong> DOI <a href="https://zenodo.org/records/19553130">10.5281/zenodo.19553130</a></li>
+</ul>
+<p>Bei Fragen und Fehlerberichten: <a href="mailto:info@iscad-it.de">info@iscad-it.de</a></p>
+
+    <div class="post-tags"><a href="/blog/?tag=release" class="post-tag">release</a><a href="/blog/?tag=pypi" class="post-tag">pypi</a><a href="/blog/?tag=aion-clinical" class="post-tag">aion-clinical</a><a href="/blog/?tag=cairn" class="post-tag">cairn</a><a href="/blog/?tag=fhir" class="post-tag">fhir</a></div>
+
+    <a class="back-link de" href="/blog/">← Zurück zum Blog</a>
+    <a class="back-link en" href="/blog/">← Back to blog</a>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="post-sidebar">
+
+    <!-- TOC -->
+    <div class="sidebar-block toc" id="tocBlock">
+      <span class="sidebar-label de">Inhalt</span>
+      <span class="sidebar-label en">Contents</span>
+      <div class="toc">
+<ul>
+<li><a href="#uberblick">Überblick</a></li>
+<li><a href="#neuerungen-in-201">Neuerungen in 2.0.1</a><ul>
+<li><a href="#uberarbeitete-authentifizierungsschicht">Überarbeitete Authentifizierungsschicht</a></li>
+<li><a href="#verbessertes-fhir-r4-mapping">Verbessertes FHIR R4 Mapping</a></li>
+<li><a href="#kausaler-query-executor">Kausaler Query-Executor</a></li>
+</ul>
+</li>
+<li><a href="#behobene-fehler">Behobene Fehler</a></li>
+<li><a href="#breaking-changes">Breaking Changes</a></li>
+<li><a href="#migration-von-110x">Migration von 1.10.x</a></li>
+<li><a href="#verfugbarkeit">Verfügbarkeit</a></li>
+</ul>
+</div>
+
+    </div>
+
+    <!-- Post meta -->
+    <div class="sidebar-block">
+      <span class="sidebar-label de">Beitrag</span>
+      <span class="sidebar-label en">Post info</span>
+      <div class="meta-row">
+        <span class="meta-key de">Autor</span><span class="meta-key en">Author</span>
+        <span class="meta-val">Friedhelm Matten</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key de">Datum</span><span class="meta-key en">Date</span>
+        <span class="meta-val">
+          <span class="de">12. Mai 2026</span>
+          <span class="en">May 12, 2026</span>
+        </span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key de">Sprache</span><span class="meta-key en">Language</span>
+        <span class="meta-val">DE</span>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="sidebar-block">
+      <span class="sidebar-label">Links</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <a href="https://pypi.org/project/aion-clinical/" target="_blank" rel="noopener" style="font-size:.85rem">PyPI · aion-clinical →</a>
+        <a href="https://zenodo.org/search?q=iscad+aion" target="_blank" rel="noopener" style="font-size:.85rem">Zenodo-Publikationen →</a>
+        <a href="https://codeberg.org/fm2-project/cairn" target="_blank" rel="noopener" style="font-size:.85rem">Codeberg · CAIRN →</a>
+        <a href="/blog/feed.xml" style="font-size:.85rem">RSS-Feed →</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">© 2026 ISCaD GmbH · Friedhelm Matten · Wedemark · EUPL-1.2</span>
+    <ul class="footer-links">
+      <li><a href="/">Startseite</a></li>
+      <li><a href="/impressum/">Impressum</a></li>
+      <li><a href="/datenschutz/">Datenschutz</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- Syntax Highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+
+<script>
+/* Language */
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.getElementById('btnDE').classList.toggle('active', lang === 'de');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+}
+(function(){
+  const init = 'de' || (navigator.language||'de').slice(0,2);
+  setLang(init === 'en' ? 'en' : 'de');
+})();
+
+/* Syntax highlighting + copy buttons */
+document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+
+  document.querySelectorAll('.post-body pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'copied ✓';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied') }, 2000);
+      });
+    });
+    pre.style.position = 'relative';
+    pre.appendChild(btn);
+  });
+
+  /* Active TOC link on scroll */
+  const headings = document.querySelectorAll('.post-body h2, .post-body h3');
+  const tocLinks = document.querySelectorAll('.toc a');
+  if (tocLinks.length === 0) document.getElementById('tocBlock').style.display = 'none';
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  headings.forEach(h => observer.observe(h));
+});
+</script>
+
+</body>
+</html>
