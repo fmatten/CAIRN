@@ -244,6 +244,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
 
 ---
 
+## Arbeitsweise & KI-Transparenz
+
+CAIRN ist die Python-Referenzimplementierung des formalen Modells FM-2.
+Architektur, Spezifikation und alle fachlichen Entscheidungen verantwortet
+der Autor (Friedhelm Matten / ISCaD GmbH). Die Code-Umsetzung erfolgt im
+Workflow *Spezifikation → Implementierung → Konformitätsprüfung* unter
+Einsatz von KI-Assistenz (Claude Code), erkennbar an den entsprechenden
+`Co-authored-by`-Trailern in der Commit-Historie.
+
+Lizenz- und Urheberverantwortung liegt vollständig beim Autor — die
+KI-Attribution ist ein Beleg der Werkzeug-Nutzung, kein Urheberanspruch.
+
+---
+
 ## Not a Medical Device
 
 CAIRN is a mathematical research tool. It is **not** a medical device under:
