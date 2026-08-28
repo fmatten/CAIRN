@@ -15,7 +15,7 @@
 
   "keywords": [
     "FHIR", "HL7", "interoperability", "formal verification", "Allen algebra",
-    "clinical informatics", "information loss", "SILD", "FM-2", "openEHR",
+    "clinical informatics", "information loss", "SILD", "FM-2",
     "ICD-10", "LOINC", "health informatics", "Z3", "SMT",
     "CDR", "terminology drift", "graph homomorphism"
   ],
