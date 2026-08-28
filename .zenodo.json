@@ -9,14 +9,14 @@
 
   "publication_date": "2026-05-25",
 
-  "license": "eupl-1.2",
+  "license": "agpl-3.0-only",
 
   "language": "eng",
 
   "keywords": [
     "FHIR", "HL7", "interoperability", "formal verification", "Allen algebra",
     "clinical informatics", "information loss", "SILD", "FM-2", "openEHR",
-    "ICD-10", "SNOMED CT", "LOINC", "health informatics", "Z3", "SMT",
+    "ICD-10", "LOINC", "health informatics", "Z3", "SMT",
     "CDR", "terminology drift", "graph homomorphism"
   ],
 
