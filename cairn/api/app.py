@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Friedhelm Matten / ISCaD GmbH
-# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
 """
 CAIRN FastAPI REST API.
 
@@ -25,7 +25,7 @@ app = FastAPI(
     title="CAIRN",
     description="Clinical interoperability reference architecture. Built on FM-2.",
     version=cairn.__version__,
-    license_info={"name": "EUPL-1.2", "url": "https://eupl.eu/1.2/en/"},
+    license_info={"name": "AGPL-3.0-only OR LicenseRef-ISCaD-Commercial"},
 )
 
 

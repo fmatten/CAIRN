@@ -23,7 +23,8 @@ version: "1.0.2"
 
 date-released: "2026-05-25"
 
-license: EUPL-1.2
+license: AGPL-3.0-only
+license-url: "https://github.com/fmatten/CAIRN/blob/main/LICENSE-COMMERCIAL.md"
 
 repository-code: "https://github.com/fmatten/CAIRN"
 

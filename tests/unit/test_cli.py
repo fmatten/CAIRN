@@ -26,7 +26,7 @@ class TestVersionCommand:
         runner = CliRunner()
         result = runner.invoke(main, ["version"])
         assert result.exit_code == 0
-        assert "EUPL" in result.output
+        assert "AGPL-3.0-only OR LicenseRef-ISCaD-Commercial" in result.output
 
 
 class TestVerifyCommand:

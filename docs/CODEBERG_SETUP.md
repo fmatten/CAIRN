@@ -77,7 +77,7 @@ Clinical interoperability reference architecture built on FM-2.
 - API: FastAPI REST, Click CLI
 - Tests: 40 passing (unit + integration + Hypothesis property tests)
 
-Licence: EUPL-1.2
+Licence: AGPL-3.0-only OR LicenseRef-ISCaD-Commercial
 NOT a medical device (EU MDR 2017/745 / MPDG)"
 
 git push origin main
