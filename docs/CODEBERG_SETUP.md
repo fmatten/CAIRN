@@ -21,7 +21,7 @@ Add these topics in Settings → Repository → Topics:
 
 ```
 fhir  hl7  interoperability  formal-verification  allen-algebra
-clinical-informatics  information-loss  python  openehr  sild  fm2
+clinical-informatics  information-loss  python  sild  fm2
 ```
 
 ### Branch Protection (Settings → Branches)

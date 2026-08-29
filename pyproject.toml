@@ -18,7 +18,6 @@ authors = [
 keywords = [
   "fhir",
   "hl7",
-  "openehr",
   "interoperability",
   "formal-verification",
   "allen-algebra",
