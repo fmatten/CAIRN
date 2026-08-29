@@ -19,9 +19,9 @@ abstract: >
 
   NOT a medical device (EU MDR 2017/745 / MPDG).
 
-version: "1.0.2"
+version: "1.0.5"
 
-date-released: "2026-05-25"
+date-released: "2026-08-29"
 
 license: AGPL-3.0-only
 license-url: "https://github.com/fmatten/CAIRN/blob/main/LICENSE-COMMERCIAL.md"
