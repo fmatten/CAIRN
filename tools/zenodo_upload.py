@@ -35,10 +35,20 @@ import requests
 # Berichtigt 29.08.2026: hier stand "19483182". Das ist die ALT-Fassung 1.0.0 vom
 # 09.04.2026 (`relations.version` Index 0, `is_last: false`), gemessen 24.08.2026 --
 # Befund B-1 in leitstand/eingang/BERICHT-2026-08-24-erklaerheft-cairn-mobdev.md.
-# Massgeblich ist Fassung 1.0.4 vom 25.05.2026: Record 20375036, DOI
-# 10.5281/zenodo.20375036; Konzept-Kennung 19483181 (Konzept-DOI
-# 10.5281/zenodo.19483181), die stets auf die letzte Fassung aufloest.
-RECORD_ID       = "20375036"         # Zenodo deposit ID for CAIRN (Fassung 1.0.4, aktuell)
+# Nachgezogen 29.08.2026 nach dem Publish der Fassung 1.0.5: Massgeblich ist jetzt
+# Record 22160922, DOI 10.5281/zenodo.22160922. Die Fassung davor (1.0.4, Record
+# 20375036) trug ein Archiv aus dem 1.0.1-Stand, dessen LICENCE den EUPL-Volltext
+# enthielt -- 1.0.5 ersetzt es. Konzept-Kennung 19483181 (Konzept-DOI
+# 10.5281/zenodo.19483181) loest stets auf die letzte Fassung auf; README und
+# CITATION.cff verweisen deshalb auf sie und nicht mehr je Release nachgezogen.
+#
+# LESEREGEL fuer jede Pruefung des Lizenzfelds an einem Zenodo-Record: Nicht der
+# Endpunkt entscheidet, sondern der Accept-Header. `Accept: application/json`
+# liefert auch auf /api/records/ die legacy-kompatible Sicht, dort steht die
+# historische Anzeige-ID `apgl-v3` und `rights` ist leer. Massgeblich ist
+# `Accept: application/vnd.inveniordm.v1+json` und darin `metadata.rights`.
+# Gemessen 29.08.2026 an genau diesem Record, beide Sichten gleichzeitig.
+RECORD_ID       = "22160922"         # Zenodo deposit ID for CAIRN (Fassung 1.0.5, aktuell)
 ZENODO_BASE_URL = "https://zenodo.org/api"
 REPO_ROOT       = Path(__file__).parent.parent
 

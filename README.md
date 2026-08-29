@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/fmatten/CAIRN/releases)
 [![Licence: AGPL-3.0](https://img.shields.io/badge/Licence-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20375036.svg)](https://doi.org/10.5281/zenodo.20375036)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19483181.svg)](https://doi.org/10.5281/zenodo.19483181)
 [![PyPI](https://img.shields.io/pypi/v/cairn-clinical.svg)](https://pypi.org/project/cairn-clinical/)
 [![Tests](https://img.shields.io/badge/tests-50%20passed-brightgreen.svg)](https://github.com/fmatten/CAIRN)
 [![NOT a Medical Device](https://img.shields.io/badge/NOT%20a-Medical%20Device-important.svg)](#not-a-medical-device)
@@ -299,9 +299,9 @@ By contributing, you agree your changes will be returned under the same licence 
   title   = {CAIRN — Clinical interoperability reference architecture},
   author  = {Matten, Friedhelm},
   year    = {2026},
-  doi     = {10.5281/zenodo.20375036},
+  doi     = {10.5281/zenodo.19483181},
   url     = {https://github.com/fmatten/CAIRN},
   licence = {AGPL-3.0-only OR LicenseRef-ISCaD-Commercial},
-  version = {1.0.4}
+  version = {1.0.5}
 }
 ```
