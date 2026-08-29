@@ -42,15 +42,39 @@ RECORD_ID       = "20375036"         # Zenodo deposit ID for CAIRN (Fassung 1.0.
 ZENODO_BASE_URL = "https://zenodo.org/api"
 REPO_ROOT       = Path(__file__).parent.parent
 
-# Files to upload
-UPLOAD_FILES = [
-    REPO_ROOT / "dist" / "cairn_clinical-1.0.1.tar.gz",
-    REPO_ROOT / "dist" / "cairn_clinical-1.0.1-py3-none-any.whl",
-    Path("/home/iscad/Downloads/cairn-1.0.1-source.zip"),
-]
-
-# Metadata from .zenodo.json
+# Metadata from .zenodo.json -- zugleich die EINZIGE Quelle der Fassungsnummer.
 ZENODO_JSON = REPO_ROOT / ".zenodo.json"
+
+
+def _fassung() -> str:
+    """Fassung aus .zenodo.json lesen, nicht fest verdrahten.
+
+    Bis 29.08.2026 stand "1.0.1" an DREI Stellen im Ausgabetext (Kopfzeile,
+    Dry-Run, Erfolgsmeldung), unabhaengig von .zenodo.json. Genau diese Drift
+    gehoert zur Vorgeschichte des Fehlstands, den dieses Skript reparieren
+    soll: Der Record 20375036 weist 1.0.4 aus und traegt ein 1.0.1-Archiv.
+    Eine Anzeige, die die deponierte Fassung nur BEHAUPTET, ist genau die
+    Stelle, an der ein Bediener den Fehler nicht sieht.
+
+    Faellt bewusst auf "?" zurueck statt zu scheitern -- eine kaputte Anzeige
+    darf keinen Upload verhindern, und "?" ist ehrlicher als eine Zahl, die
+    nirgendwoher stammt.
+    """
+    try:
+        return json.loads(ZENODO_JSON.read_text(encoding="utf-8"))["version"]
+    except Exception:
+        return "?"
+
+
+VERSION = _fassung()
+
+# Files to upload. Der Name wird aus VERSION gebildet, damit er nicht erneut
+# hinter der Fassung zurueckbleiben kann. Das Zip entsteht per
+#     git archive --format=zip --prefix=cairn-<VERSION>/ -o dist/cairn-<VERSION>-source.zip v<VERSION>
+# AUS DEM TAG, nicht aus dem Arbeitsbaum. dist/ ist in .gitignore.
+UPLOAD_FILES = [
+    REPO_ROOT / "dist" / f"cairn-{VERSION}-source.zip",
+]
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -74,7 +98,7 @@ def check_response(r: requests.Response, action: str) -> dict:
 
 def run(token: str, dry_run: bool = False) -> None:
     print("\n" + "═" * 60)
-    print(f"  CAIRN Zenodo Upload — v1.0.1")
+    print(f"  CAIRN Zenodo Upload — v{VERSION}")
     print(f"  Record ID : {RECORD_ID}")
     print(f"  Dry-run   : {dry_run}")
     print("═" * 60)
@@ -106,7 +130,7 @@ def run(token: str, dry_run: bool = False) -> None:
 
         print(f"\n[DRY-RUN] Ziel ...")
         print(f"  → Zenodo Record : https://zenodo.org/deposit/{RECORD_ID}")
-        print(f"  → Neue Version  : v1.0.1")
+        print(f"  → Neue Version  : v{VERSION}")
         print(f"  → Gesamtgröße   : {total_bytes // 1024} KB")
         print(f"\n[DRY-RUN] {'✅ Bereit für Upload.' if all_ok else '❌ Bitte fehlende Dateien ergänzen.'}")
         print("  Starte echten Upload mit: python3 tools/zenodo_upload.py --token TOKEN")
@@ -230,7 +254,7 @@ def run(token: str, dry_run: bool = False) -> None:
     url = result.get("links", {}).get("html", f"https://zenodo.org/records/{new_id}")
 
     print("\n" + "═" * 60)
-    print(f"  ✅ CAIRN v1.0.1 auf Zenodo veröffentlicht!")
+    print(f"  ✅ CAIRN v{VERSION} auf Zenodo veröffentlicht!")
     print(f"  DOI : {doi}")
     print(f"  URL : {url}")
     print("═" * 60 + "\n")
