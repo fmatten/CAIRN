@@ -27,7 +27,18 @@ import requests
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 
-RECORD_ID       = "19483182"         # Zenodo deposit ID for CAIRN
+# Zenodo-Deposit-ID, von der Schritt 2 (`actions/newversion`) die neue Fassung
+# ableitet. Sie muss die Fassung benennen, von der abgeleitet werden soll -- das ist
+# die aktuelle (letzte). Ob die Legacy-API eine ueberholte Fassung zurueckweist,
+# ist hier NICHT gemessen; unabhaengig davon ist die alte Nummer nicht gemeint.
+#
+# Berichtigt 29.08.2026: hier stand "19483182". Das ist die ALT-Fassung 1.0.0 vom
+# 09.04.2026 (`relations.version` Index 0, `is_last: false`), gemessen 24.08.2026 --
+# Befund B-1 in leitstand/eingang/BERICHT-2026-08-24-erklaerheft-cairn-mobdev.md.
+# Massgeblich ist Fassung 1.0.4 vom 25.05.2026: Record 20375036, DOI
+# 10.5281/zenodo.20375036; Konzept-Kennung 19483181 (Konzept-DOI
+# 10.5281/zenodo.19483181), die stets auf die letzte Fassung aufloest.
+RECORD_ID       = "20375036"         # Zenodo deposit ID for CAIRN (Fassung 1.0.4, aktuell)
 ZENODO_BASE_URL = "https://zenodo.org/api"
 REPO_ROOT       = Path(__file__).parent.parent
 
@@ -161,6 +172,27 @@ def run(token: str, dry_run: bool = False) -> None:
             sys.exit(1)
 
     # ── Step 5: Update metadata ────────────────────────────────────────────────
+    #
+    # WARNUNG -- DAS LIZENZFELD IST UEBER DIESE API NACHWEISLICH NICHT SCHREIBBAR.
+    # Gemessen 09.08.2026 (Befund B-3 in
+    # leitstand/eingang/BERICHT-2026-08-09-en-abnahme-zenodo-mobdev.md): Die
+    # Legacy-Deposit-API (`actions/edit` -> PUT -> `actions/publish`) NIMMT das
+    # Lizenzfeld AN und antwortet HTTP 200/202, SCHREIBT es aber NICHT -- stiller
+    # Rueckfall auf den Altwert. Im selben Aufruf wurde die Beschreibung
+    # erfolgreich geaendert: Ein Teilerfolg verdeckt hier den Fehlschlag des
+    # anderen Teils, der PUT sieht von aussen vollstaendig gelungen aus.
+    # check_response() unten prueft nur den Statuscode und kann das nicht bemerken.
+    #
+    # Folge fuer jeden Lauf: Nach dem Publish den RECORD lesen, nicht die Antwort
+    # dieses Aufrufs -- ein Erfolgscode ist eine Aussage ueber die Uebermittlung,
+    # nicht ueber die Wirkung. Weicht das Lizenzfeld vom Sollwert in .zenodo.json
+    # ab, ist es in der Zenodo-Weboberflaeche zu stellen (FM-Handgriff, Regel 6);
+    # der zweite API-Weg (RDM) ist am selben Tag ebenfalls gescheitert (verwarf
+    # Pflichtfelder, Publish 400). Sollwert ist die Dual-Lizenz
+    # AGPL-3.0-only OR LicenseRef-ISCaD-Commercial; Zenodos license-Feld nimmt
+    # eine Kennung -- agpl-3.0-only (Vokabular-Kennung, HTTP 200; die frueher
+    # gefuehrte Schreibweise apgl-v3 existiert im Vokabular nicht, HTTP 404),
+    # die kommerzielle Haelfte steht in notes.
     print("\n[5] Metadaten aktualisieren ...")
     with open(ZENODO_JSON) as f:
         zenodo_meta = json.load(f)
