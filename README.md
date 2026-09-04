@@ -305,3 +305,19 @@ By contributing, you agree your changes will be returned under the same licence 
   version = {1.0.5}
 }
 ```
+
+---
+
+## Klonen von außerhalb mobdev
+
+**Echte Klon-URL:** `git@github.com:fmatten/CAIRN.git`
+
+Der auf der Arbeitsmaschine *mobdev* eingetragene `origin` lautet `cairn-github:fmatten/CAIRN.git` und ist ein
+**SSH-Alias aus der dortigen `~/.ssh/config`**, keine auflösbare Adresse. Auf einem frischen
+Rechner existiert dieser Alias nicht; ein `git clone` über die Aliasform scheitert dort an der
+**Namensauflösung** — nicht an fehlender Berechtigung, was die Fehlersuche in die falsche
+Richtung schickt. Von jeder anderen Maschine aus deshalb immer die echte URL oben verwenden.
+
+*Ergänzt 04.09.2026 (Aufbau-Plan `content/aufbau-plan-sild-aion-2026-09.md` §2.1, Lücke L-1).
+Die echte URL wurde am selben Tag per `git ls-remote` gegen GitHub geprüft; der lokale
+`origin` bleibt als mobdev-Bequemlichkeit unverändert.*
